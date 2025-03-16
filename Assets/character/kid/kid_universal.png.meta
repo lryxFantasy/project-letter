@@ -43,7 +43,11 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
+<<<<<<< HEAD
   spriteMode: 2
+=======
+  spriteMode: 1
+>>>>>>> cd207c3c421f5589cf70d5f8c703876c900ec39c
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -95,6 +99,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
+<<<<<<< HEAD
     sprites:
     - serializedVersion: 2
       name: kid_universal_0
@@ -4569,6 +4574,9 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+=======
+    sprites: []
+>>>>>>> cd207c3c421f5589cf70d5f8c703876c900ec39c
     outline: []
     physicsShape: []
     bones: []
@@ -4579,6 +4587,7 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+<<<<<<< HEAD
     nameFileIdTable:
       kid_universal_0: 644448204
       kid_universal_1: -581491671
@@ -4793,6 +4802,9 @@ TextureImporter:
       kid_universal_97: -1447293727
       kid_universal_98: -256615318
       kid_universal_99: 1280173102
+=======
+    nameFileIdTable: {}
+>>>>>>> cd207c3c421f5589cf70d5f8c703876c900ec39c
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
