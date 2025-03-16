@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: soldier_son_left_waik
+  m_Name: soldier_son_left_walk
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -20,8 +20,6 @@ AnimationClip:
   m_PPtrCurves:
   - serializedVersion: 2
     curve:
-    - time: 0
-      value: {fileID: -957268045, guid: 0ce12ccddcb38e147b84be3e69a9981f, type: 3}
     - time: 0.083333336
       value: {fileID: 808376912, guid: 0ce12ccddcb38e147b84be3e69a9981f, type: 3}
     - time: 0.16666667
@@ -40,8 +38,6 @@ AnimationClip:
       value: {fileID: 158459963, guid: 0ce12ccddcb38e147b84be3e69a9981f, type: 3}
     - time: 0.85
       value: {fileID: -1870151179, guid: 0ce12ccddcb38e147b84be3e69a9981f, type: 3}
-    - time: 0.95
-      value: {fileID: 713088662, guid: 0ce12ccddcb38e147b84be3e69a9981f, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -64,7 +60,6 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
-    - {fileID: -957268045, guid: 0ce12ccddcb38e147b84be3e69a9981f, type: 3}
     - {fileID: 808376912, guid: 0ce12ccddcb38e147b84be3e69a9981f, type: 3}
     - {fileID: -1749721063, guid: 0ce12ccddcb38e147b84be3e69a9981f, type: 3}
     - {fileID: 1011245798, guid: 0ce12ccddcb38e147b84be3e69a9981f, type: 3}
@@ -74,13 +69,12 @@ AnimationClip:
     - {fileID: 1576627708, guid: 0ce12ccddcb38e147b84be3e69a9981f, type: 3}
     - {fileID: 158459963, guid: 0ce12ccddcb38e147b84be3e69a9981f, type: 3}
     - {fileID: -1870151179, guid: 0ce12ccddcb38e147b84be3e69a9981f, type: 3}
-    - {fileID: 713088662, guid: 0ce12ccddcb38e147b84be3e69a9981f, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.96666664
+    m_StopTime: 0.8666667
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
