@@ -100,12 +100,12 @@ TextureImporter:
       name: Run (32x32)_0
       rect:
         serializedVersion: 2
-        x: 6
-        y: 3
-        width: 21
-        height: 25
+        x: 5
+        y: 2
+        width: 23
+        height: 27
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -121,12 +121,12 @@ TextureImporter:
       name: Run (32x32)_1
       rect:
         serializedVersion: 2
-        x: 6
-        y: 4
-        width: 21
-        height: 25
-      alignment: 9
-      pivot: {x: 0.50949496, y: 0.45214817}
+        x: 37
+        y: 2
+        width: 23
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -142,12 +142,12 @@ TextureImporter:
       name: Run (32x32)_2
       rect:
         serializedVersion: 2
-        x: 6
-        y: 4
-        width: 21
-        height: 25
+        x: 69
+        y: 2
+        width: 23
+        height: 27
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -163,12 +163,12 @@ TextureImporter:
       name: Run (32x32)_3
       rect:
         serializedVersion: 2
-        x: 102
-        y: 3
-        width: 21
-        height: 25
+        x: 101
+        y: 2
+        width: 23
+        height: 27
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -184,12 +184,12 @@ TextureImporter:
       name: Run (32x32)_4
       rect:
         serializedVersion: 2
-        x: 133
-        y: 3
-        width: 23
-        height: 25
+        x: 132
+        y: 2
+        width: 25
+        height: 26
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -205,12 +205,12 @@ TextureImporter:
       name: Run (32x32)_5
       rect:
         serializedVersion: 2
-        x: 165
-        y: 3
-        width: 23
-        height: 25
+        x: 164
+        y: 2
+        width: 25
+        height: 26
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -226,12 +226,12 @@ TextureImporter:
       name: Run (32x32)_6
       rect:
         serializedVersion: 2
-        x: 197
-        y: 3
-        width: 23
-        height: 25
+        x: 196
+        y: 2
+        width: 25
+        height: 27
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -247,12 +247,12 @@ TextureImporter:
       name: Run (32x32)_7
       rect:
         serializedVersion: 2
-        x: 229
-        y: 3
-        width: 23
-        height: 25
+        x: 228
+        y: 2
+        width: 25
+        height: 27
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -268,12 +268,12 @@ TextureImporter:
       name: Run (32x32)_8
       rect:
         serializedVersion: 2
-        x: 261
-        y: 3
-        width: 23
-        height: 25
+        x: 260
+        y: 2
+        width: 25
+        height: 27
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -289,12 +289,12 @@ TextureImporter:
       name: Run (32x32)_9
       rect:
         serializedVersion: 2
-        x: 293
-        y: 3
-        width: 23
-        height: 25
+        x: 292
+        y: 2
+        width: 25
+        height: 27
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -310,12 +310,12 @@ TextureImporter:
       name: Run (32x32)_10
       rect:
         serializedVersion: 2
-        x: 325
-        y: 3
-        width: 23
-        height: 25
+        x: 324
+        y: 2
+        width: 25
+        height: 26
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -331,12 +331,12 @@ TextureImporter:
       name: Run (32x32)_11
       rect:
         serializedVersion: 2
-        x: 357
-        y: 3
-        width: 23
-        height: 25
+        x: 356
+        y: 2
+        width: 25
+        height: 26
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -344,48 +344,6 @@ TextureImporter:
       bones: []
       spriteID: dc7ebe3a53b370441b8aa24a21a0171f
       internalID: -355238549
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Run (32x32)_12
-      rect:
-        serializedVersion: 2
-        x: 38
-        y: 3
-        width: 21
-        height: 25
-      alignment: 1
-      pivot: {x: 0, y: 1}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 21bdacaa20126ee419f1a3994c478231
-      internalID: 1966308289
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Run (32x32)_13
-      rect:
-        serializedVersion: 2
-        x: 70
-        y: 3
-        width: 21
-        height: 25
-      alignment: 1
-      pivot: {x: 0, y: 1}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 995b1e942e8a84c43ba401a5483adf9c
-      internalID: 1670763052
       vertices: []
       indices: 
       edges: []
@@ -405,8 +363,6 @@ TextureImporter:
       Run (32x32)_1: 1694208948
       Run (32x32)_10: -306336621
       Run (32x32)_11: -355238549
-      Run (32x32)_12: 1966308289
-      Run (32x32)_13: 1670763052
       Run (32x32)_2: -895638944
       Run (32x32)_3: -1853276293
       Run (32x32)_4: -100147379
