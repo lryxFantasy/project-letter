@@ -7,6 +7,7 @@ public class WalkAnimation : MonoBehaviour
     private float timer;
     private int state;
     private bool facingRight;
+    private bool canWalk = true; // 新增：控制是否允许移动
 
     // 可配置的参数
     [Header("Animation Settings")]
@@ -29,6 +30,14 @@ public class WalkAnimation : MonoBehaviour
 
     void Update()
     {
+        // 如果不允许移动，强制进入站立状态
+        if (!canWalk)
+        {
+            animator.SetBool(walkParameter, false);
+            spriteRenderer.flipX = facingRight; // 保持当前朝向
+            return;
+        }
+
         timer += Time.deltaTime;
 
         switch (state)
@@ -82,6 +91,17 @@ public class WalkAnimation : MonoBehaviour
                     timer = 0f;
                 }
                 break;
+        }
+    }
+
+    // 公共方法：控制是否允许移动和行走动画
+    public void SetWalkingState(bool allowWalking)
+    {
+        canWalk = allowWalking;
+        if (!canWalk)
+        {
+            timer = 0f; // 重置计时器，避免状态切换
+            state = 0;  // 强制进入站立状态
         }
     }
 }
