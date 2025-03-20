@@ -50,6 +50,7 @@ public class PlayerController : MonoBehaviour
         bottomSprite.canvasRenderer.SetAlpha(0f);
         interactionText.gameObject.SetActive(true);
         interactionText.alpha = 1f;
+        bottomSprite.transform.SetAsFirstSibling(); // 默认放到最底层
     }
 
     void AdjustUISizeAndPosition()
