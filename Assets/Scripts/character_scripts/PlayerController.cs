@@ -64,9 +64,14 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         CheckForNearbyNPC();
+        if (PauseMenu.IsPaused && Input.GetKeyDown(KeyCode.E)) 
+            return; // 如果暂停，直接禁用 E 键
+       
         if (Input.GetKeyDown(KeyCode.E))
+        {
             if (!isInDialogue && canInteract) StartDialogue();
             else if (isInDialogue) EndDialogue();
+        }
     }
 
     void LateUpdate()
