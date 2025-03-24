@@ -70,9 +70,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingLayerID: -1869315837
+  m_SortingLayer: 1
+  m_SortingOrder: -10000
   m_Sprite: {fileID: 21300000, guid: 9386280b605c2114eab8cb627055145f, type: 3}
   m_Color: {r: 0.7056604, g: 0.7056604, b: 0.7056604, a: 1}
   m_FlipX: 0
@@ -100,9 +100,10 @@ GameObject:
   - component: {fileID: 7115627229469547621}
   - component: {fileID: 4852820043916314219}
   - component: {fileID: 4211369896265750851}
+  - component: {fileID: 8715090867171792223}
   m_Layer: 0
   m_Name: cat
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -117,7 +118,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.1678, y: -2.5011, z: 0}
-  m_LocalScale: {x: 1.1207, y: 1.1456, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4066697940979102313}
@@ -299,5 +300,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactionDistance: 2
-  interactionTextPrefab: {fileID: 0}
-  offset: {x: 1, y: 1, z: 0}
+  interactionText: {fileID: 0}
+  bottomSpriteImage: {fileID: 21300016, guid: 56d84991286850f428b4e7df0cca7380, type: 3}
+  offset: {x: 40, y: 15, z: 0}
+  fadeDuration: 0.1
+  dialogueText: {fileID: 0}
+  dialoguePanel: {fileID: 0}
+  optionButtonPrefab: {fileID: 5601276670822262584, guid: e461c4b9bb951724c85583e864e9e35e,
+    type: 3}
+  optionsContainer: {fileID: 0}
+  cameraController: {fileID: 0}
+--- !u!114 &8715090867171792223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4020374886210008693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d95d4ea4c5a76f4d87c4a7cf949e819, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventoryPanel: {fileID: 0}
+  inventoryManager: {fileID: 0}
+  inventoryButton: {fileID: 0}
+  pauseMenu: {fileID: 0}

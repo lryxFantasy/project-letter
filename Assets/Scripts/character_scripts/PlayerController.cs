@@ -46,9 +46,6 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         mainCamera = Camera.main;
-        if (interactionText == null) Debug.LogError("interactionText 未赋值！");
-        if (cameraController == null) Debug.LogError("cameraController 未赋值！");
-
         interactionText.gameObject.SetActive(false);
         dialoguePanel.SetActive(false);
         bottomSprite = new GameObject("BottomSprite", typeof(Image)).GetComponent<Image>();
@@ -59,7 +56,7 @@ public class PlayerController : MonoBehaviour
         bottomSprite.canvasRenderer.SetAlpha(0f);
         interactionText.gameObject.SetActive(true);
         interactionText.alpha = 1f;
-        bottomSprite.transform.SetAsFirstSibling(); // 默认放到最底层
+        bottomSprite.transform.SetAsFirstSibling();
     }
 
     void AdjustUISizeAndPosition()
@@ -76,7 +73,7 @@ public class PlayerController : MonoBehaviour
         CheckForNearbyDoor();
 
         if (PauseMenu.IsPaused && Input.GetKeyDown(KeyCode.E))
-            return; // 如果暂停，直接禁用 E 键
+            return;
 
         if (Input.GetKeyDown(KeyCode.E))
         {
@@ -110,13 +107,12 @@ public class PlayerController : MonoBehaviour
             Vector3 targetTextPos = screenPos + new Vector3(offset.x * 1.25f, offset.y * 1.2f, 0f);
             Vector3 targetSpritePos = screenPos + offset - new Vector3(0, -5f * Screen.width / 1280f, 0);
 
-            // 平滑移动 UI
             interactionText.rectTransform.position = Vector3.Lerp(interactionText.rectTransform.position, targetTextPos, 0.1f);
             bottomSprite.rectTransform.position = Vector3.Lerp(bottomSprite.rectTransform.position, targetSpritePos, 0.1f);
         }
     }
 
-    public bool IsInDialogue() => isInDialogue; // 获取对话状态
+    public bool IsInDialogue() => isInDialogue;
 
     void CheckForNearbyNPC()
     {
@@ -157,7 +153,6 @@ public class PlayerController : MonoBehaviour
         nearestDoorIndex = -1;
         isNearExitDoor = false;
 
-        // 查找所有标记为 "Door" 的对象
         foreach (GameObject door in GameObject.FindGameObjectsWithTag("Door"))
         {
             float distance = Vector2.Distance(transform.position, door.transform.position);
@@ -165,8 +160,6 @@ public class PlayerController : MonoBehaviour
             {
                 closestDistance = distance;
                 nearestDoor = door.transform;
-                // 假设门的名称包含索引信息，或者通过其他方式获取 houseIndex
-                // 这里我们假设门的名称格式为 "Door_0", "Door_1" 等，或者通过组件获取
                 string doorName = door.name;
                 if (doorName.Contains("Door_"))
                 {
@@ -176,13 +169,14 @@ public class PlayerController : MonoBehaviour
                         nearestDoorIndex = index;
                     }
                 }
-                // 检查是否是出口门（通过门的名字是否包含 "exit" 判断，不区分大小写）
                 if (doorName.ToLower().Contains("exit"))
                 {
                     isNearExitDoor = true;
                 }
                 else
-                    { isNearExitDoor = false; }
+                {
+                    isNearExitDoor = false;
+                }
             }
         }
 
@@ -204,21 +198,21 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void FadeIn() // 淡入交互提示
+    void FadeIn()
     {
         interactionText.CrossFadeAlpha(1f, fadeDuration, false);
         bottomSprite.CrossFadeAlpha(1f, fadeDuration, false);
         Invoke(nameof(ResetFade), fadeDuration);
     }
 
-    void FadeOut() // 淡出交互提示
+    void FadeOut()
     {
         interactionText.CrossFadeAlpha(0f, fadeDuration, false);
         bottomSprite.CrossFadeAlpha(0f, fadeDuration, false);
         Invoke(nameof(ResetFade), fadeDuration);
     }
 
-    void ResetFade() // 重置淡入淡出状态
+    void ResetFade()
     {
         isFading = false;
         if (!canInteract && !canEnterHouse)
@@ -228,9 +222,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void StartDialogue() // 开始对话
+    void StartDialogue()
     {
-        if (currentNPC == null || string.IsNullOrEmpty(currentNPC.role)) { Debug.LogError("当前NPC未设置角色！"); return; }
+        if (currentNPC == null || string.IsNullOrEmpty(currentNPC.role)) return;
+        Debug.Log($"PlayerController: 开始对话，NPC角色：{currentNPC.role}"); // 仅保留此调试
         isInDialogue = true;
         canInteract = false;
         interactionText.gameObject.SetActive(false);
@@ -244,7 +239,7 @@ public class PlayerController : MonoBehaviour
         sendMessageCoroutine = StartCoroutine(SendMessageToQwen("你好"));
     }
 
-    void EndDialogue() // 结束对话
+    void EndDialogue()
     {
         isInDialogue = false;
         dialoguePanel.SetActive(false);
@@ -255,13 +250,13 @@ public class PlayerController : MonoBehaviour
         CheckForNearbyDoor();
     }
 
-    void ClearOptionButtons() // 清除选项按钮
+    void ClearOptionButtons()
     {
         foreach (var button in optionButtons) Destroy(button.gameObject);
         optionButtons.Clear();
     }
 
-    void CreateOptionButtons(string[] options) // 创建选项按钮
+    void CreateOptionButtons(string[] options)
     {
         ClearOptionButtons();
         foreach (string option in options)
@@ -274,14 +269,14 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void OnOptionSelected(string option) // 选择选项
+    void OnOptionSelected(string option)
     {
         dialogueText.text = "正在思考...";
         ClearOptionButtons();
         sendMessageCoroutine = StartCoroutine(SendMessageToQwen(option));
     }
 
-    IEnumerator SendMessageToQwen(string message) // 发送消息到API
+    IEnumerator SendMessageToQwen(string message)
     {
         conversationHistory.Add(new Message { role = "user", content = message });
         UnityWebRequest request = new UnityWebRequest(apiUrl, "POST")
@@ -307,5 +302,11 @@ public class PlayerController : MonoBehaviour
             conversationHistory.Add(new Message { role = "assistant", content = aiResponse });
         }
         else dialogueText.text = "错误: " + request.error;
+    }
+
+    // 获取当前 NPC 的角色名
+    public string GetCurrentNPCRole()
+    {
+        return currentNPC != null ? currentNPC.role : null;
     }
 }
