@@ -945,7 +945,7 @@ TextureImporter:
         width: 6
         height: 19
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -953,6 +953,216 @@ TextureImporter:
       bones: []
       spriteID: b87981b4c3515e84696cc81bcb8bee3a
       internalID: 1547826993
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gameboyassets_41
+      rect:
+        serializedVersion: 2
+        x: 271
+        y: 437
+        width: 136
+        height: 72
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 443286b2250e9c047a83b36c829715e3
+      internalID: -592690659
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gameboyassets_42
+      rect:
+        serializedVersion: 2
+        x: 270
+        y: 389
+        width: 138
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f1ea56b84c34fc2499ffd06d4727a495
+      internalID: -408254914
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gameboyassets_43
+      rect:
+        serializedVersion: 2
+        x: 410
+        y: 436
+        width: 106
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 845da8a99c5a5854680884155e2a3f2f
+      internalID: 949785994
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gameboyassets_44
+      rect:
+        serializedVersion: 2
+        x: 410
+        y: 375
+        width: 107
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8434f1ce734b30d45853dc1410a4aa53
+      internalID: -1065916129
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gameboyassets_45
+      rect:
+        serializedVersion: 2
+        x: 301
+        y: 277
+        width: 102
+        height: 90
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4264fe2397d353244a5c5e0f4fe0daa5
+      internalID: 362336893
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gameboyassets_46
+      rect:
+        serializedVersion: 2
+        x: 301
+        y: 212
+        width: 102
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c72b21ea9deca914c8cbc7737152d0d0
+      internalID: 1823722350
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gameboyassets_47
+      rect:
+        serializedVersion: 2
+        x: 411
+        y: 254
+        width: 145
+        height: 73
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1e9f5126b02b7bf4e8e6d9fd6b61626d
+      internalID: 319083542
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gameboyassets_48
+      rect:
+        serializedVersion: 2
+        x: 410
+        y: 203
+        width: 148
+        height: 52
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 78832b2713e02b946aea0ae9d38e7015
+      internalID: 689489097
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gameboyassets_49
+      rect:
+        serializedVersion: 2
+        x: 568
+        y: 260
+        width: 127
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 35aea6aa818d41642818b556b2db4254
+      internalID: -1031872058
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gameboyassets_50
+      rect:
+        serializedVersion: 2
+        x: 567
+        y: 194
+        width: 134
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3162f8ef88f883f43a2f9829fafaad6f
+      internalID: -926251969
       vertices: []
       indices: 
       edges: []
@@ -1004,7 +1214,17 @@ TextureImporter:
       gameboyassets_39: -603924909
       gameboyassets_4: -788354556
       gameboyassets_40: 1547826993
+      gameboyassets_41: -592690659
+      gameboyassets_42: -408254914
+      gameboyassets_43: 949785994
+      gameboyassets_44: -1065916129
+      gameboyassets_45: 362336893
+      gameboyassets_46: 1823722350
+      gameboyassets_47: 319083542
+      gameboyassets_48: 689489097
+      gameboyassets_49: -1031872058
       gameboyassets_5: 767070783
+      gameboyassets_50: -926251969
       gameboyassets_6: 1371067133
       gameboyassets_7: 323200817
       gameboyassets_8: -669932138
