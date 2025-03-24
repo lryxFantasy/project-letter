@@ -8,7 +8,7 @@ using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float interactionDistance = 2f; // NPC交互距离
+    [SerializeField] private float interactionDistance = 2f; // 交互距离（用于NPC和门）
     [SerializeField] private TMP_Text interactionText; // 交互提示文本
     [SerializeField] private Sprite bottomSpriteImage; // 交互提示底图
     [SerializeField] private Vector3 offset = new Vector3(50f, 50f, 0f); // UI偏移量
@@ -17,6 +17,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject dialoguePanel; // 对话面板
     [SerializeField] private Button optionButtonPrefab; // 选项按钮预制体
     [SerializeField] private Transform optionsContainer; // 选项容器
+
+    // 新增：用于进入房屋的字段
+    [SerializeField] private CameraController cameraController; // 引用相机控制脚本
+    private Transform nearestDoor;
+    private int nearestDoorIndex = -1; // 门的索引（0-5，对应六个房屋）
+    private bool isNearExitDoor = false; // 是否靠近出口门
+    private bool canEnterHouse; // 是否可以进入房屋
 
     private Transform nearestNPC;
     private NPC currentNPC;
@@ -40,6 +47,8 @@ public class PlayerController : MonoBehaviour
     {
         mainCamera = Camera.main;
         if (interactionText == null) Debug.LogError("interactionText 未赋值！");
+        if (cameraController == null) Debug.LogError("cameraController 未赋值！");
+
         interactionText.gameObject.SetActive(false);
         dialoguePanel.SetActive(false);
         bottomSprite = new GameObject("BottomSprite", typeof(Image)).GetComponent<Image>();
@@ -64,13 +73,32 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         CheckForNearbyNPC();
-        if (PauseMenu.IsPaused && Input.GetKeyDown(KeyCode.E)) 
+        CheckForNearbyDoor();
+
+        if (PauseMenu.IsPaused && Input.GetKeyDown(KeyCode.E))
             return; // 如果暂停，直接禁用 E 键
-       
+
         if (Input.GetKeyDown(KeyCode.E))
         {
-            if (!isInDialogue && canInteract) StartDialogue();
-            else if (isInDialogue) EndDialogue();
+            if (isInDialogue)
+            {
+                EndDialogue();
+            }
+            else if (canInteract)
+            {
+                StartDialogue();
+            }
+            else if (canEnterHouse)
+            {
+                if (!cameraController.IsIndoors() && !isNearExitDoor)
+                {
+                    cameraController.EnterHouse(nearestDoorIndex);
+                }
+                else if (cameraController.IsIndoors() && isNearExitDoor)
+                {
+                    cameraController.ExitHouse();
+                }
+            }
         }
     }
 
@@ -105,7 +133,7 @@ public class PlayerController : MonoBehaviour
             }
         }
         bool inRange = closestDistance <= interactionDistance;
-        if (inRange && !canInteract && !isFading && !isInDialogue)
+        if (inRange && !canInteract && !isFading && !isInDialogue && !canEnterHouse)
         {
             canInteract = true;
             isFading = true;
@@ -117,6 +145,60 @@ public class PlayerController : MonoBehaviour
         else if (!inRange && canInteract && !isFading && !isInDialogue)
         {
             canInteract = false;
+            isFading = true;
+            FadeOut();
+        }
+    }
+
+    void CheckForNearbyDoor()
+    {
+        float closestDistance = Mathf.Infinity;
+        nearestDoor = null;
+        nearestDoorIndex = -1;
+        isNearExitDoor = false;
+
+        // 查找所有标记为 "Door" 的对象
+        foreach (GameObject door in GameObject.FindGameObjectsWithTag("Door"))
+        {
+            float distance = Vector2.Distance(transform.position, door.transform.position);
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                nearestDoor = door.transform;
+                // 假设门的名称包含索引信息，或者通过其他方式获取 houseIndex
+                // 这里我们假设门的名称格式为 "Door_0", "Door_1" 等，或者通过组件获取
+                string doorName = door.name;
+                if (doorName.Contains("Door_"))
+                {
+                    string indexStr = doorName.Replace("Door_", "");
+                    if (int.TryParse(indexStr, out int index))
+                    {
+                        nearestDoorIndex = index;
+                    }
+                }
+                // 检查是否是出口门（通过门的名字是否包含 "exit" 判断，不区分大小写）
+                if (doorName.ToLower().Contains("exit"))
+                {
+                    isNearExitDoor = true;
+                }
+                else
+                    { isNearExitDoor = false; }
+            }
+        }
+
+        bool inRange = closestDistance <= interactionDistance;
+        if (inRange && !canEnterHouse && !isFading && !isInDialogue && !canInteract)
+        {
+            canEnterHouse = true;
+            isFading = true;
+            interactionText.text = isNearExitDoor ? "按 E 离开" : "按 E 进入";
+            interactionText.gameObject.SetActive(true);
+            bottomSprite.gameObject.SetActive(true);
+            FadeIn();
+        }
+        else if (!inRange && canEnterHouse && !isFading && !isInDialogue)
+        {
+            canEnterHouse = false;
             isFading = true;
             FadeOut();
         }
@@ -139,7 +221,7 @@ public class PlayerController : MonoBehaviour
     void ResetFade() // 重置淡入淡出状态
     {
         isFading = false;
-        if (!canInteract)
+        if (!canInteract && !canEnterHouse)
         {
             interactionText.gameObject.SetActive(false);
             bottomSprite.gameObject.SetActive(false);
@@ -170,6 +252,7 @@ public class PlayerController : MonoBehaviour
         if (sendMessageCoroutine != null) { StopCoroutine(sendMessageCoroutine); sendMessageCoroutine = null; }
         if (currentNPCWalkAnimation != null) currentNPCWalkAnimation.SetWalkingState(true);
         CheckForNearbyNPC();
+        CheckForNearbyDoor();
     }
 
     void ClearOptionButtons() // 清除选项按钮
