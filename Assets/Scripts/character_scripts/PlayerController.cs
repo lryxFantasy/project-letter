@@ -239,7 +239,7 @@ public class PlayerController : MonoBehaviour
         sendMessageCoroutine = StartCoroutine(SendMessageToQwen("ÄãºÃ"));
     }
 
-    void EndDialogue()
+    public void EndDialogue()
     {
         isInDialogue = false;
         dialoguePanel.SetActive(false);

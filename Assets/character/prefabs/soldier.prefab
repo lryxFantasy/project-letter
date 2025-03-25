@@ -17,7 +17,6 @@ GameObject:
   - component: {fileID: 2664269737205540876}
   - component: {fileID: 7112912031941040741}
   - component: {fileID: 4864915756427161902}
-  - component: {fileID: 3812806126410962007}
   m_Layer: 0
   m_Name: soldier
   m_TagString: NPC
@@ -262,16 +261,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   role: "\u8001\u5175-\u7EF4\u514B\u6258"
---- !u!114 &3812806126410962007
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6596959097140985701}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab04afba2f2ffd7449a020367fd09d35, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  residentName: "\u7EF4\u514B\u6258\xB7\u51EF\u6069"

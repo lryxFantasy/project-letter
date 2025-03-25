@@ -17,7 +17,6 @@ GameObject:
   - component: {fileID: 4213574026962734782}
   - component: {fileID: 3132332775652916918}
   - component: {fileID: 6935490793126945953}
-  - component: {fileID: 4477448786761975672}
   m_Layer: 0
   m_Name: grandma
   m_TagString: NPC
@@ -262,16 +261,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   role: "\u8001\u5976\u5976-\u841D\u4E1D"
---- !u!114 &4477448786761975672
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9096362135875853233}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab04afba2f2ffd7449a020367fd09d35, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  residentName: "\u841D\u4E1D"

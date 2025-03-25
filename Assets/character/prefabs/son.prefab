@@ -17,7 +17,6 @@ GameObject:
   - component: {fileID: 6935835004037051814}
   - component: {fileID: 487274273577316145}
   - component: {fileID: 7414090072282517463}
-  - component: {fileID: 3698958418663854958}
   m_Layer: 0
   m_Name: son
   m_TagString: NPC
@@ -262,16 +261,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   role: "\u8BD7\u4EBA-\u4F0A\u83B1\u4E9A\u65AF"
---- !u!114 &3698958418663854958
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 186989519850241688}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab04afba2f2ffd7449a020367fd09d35, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  residentName: "\u4F0A\u83B1\u4E9A\u65AF\xB7\u51EF\u6069"

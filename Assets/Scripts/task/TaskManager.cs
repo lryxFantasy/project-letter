@@ -16,10 +16,11 @@ public class TaskManager : MonoBehaviour
     public GameObject normalDialoguePanel;
     public Button deliverButton;
     public PlayerController playerController;
+    public InventoryManager inventoryManager; // 新增：背包管理器引用
 
     private bool isPanelOpen = false;
     private float previousTimeScale;
-    private TaskBase currentTask;
+    public TaskBase currentTask;
     private string currentNPCName;
 
     void Start()
@@ -32,9 +33,9 @@ public class TaskManager : MonoBehaviour
         closeButton.onClick.AddListener(ToggleTaskPanel);
         deliverButton.onClick.AddListener(TriggerDeliverLetter);
 
-        currentTask = gameObject.AddComponent<Task1>();
-        (currentTask as Task1)?.SetupDialogueUI(dialoguePanel, dialogueText, nextButton);
-        (currentTask as Task1)?.SetupDeliverButton(normalDialoguePanel, deliverButton);
+        currentTask = gameObject.AddComponent<Task0>();
+        (currentTask as Task0)?.SetupDialogueUI(dialoguePanel, dialogueText, nextButton);
+        (currentTask as Task0)?.StartTaskDialogue();
         UpdateTaskDisplay();
 
         previousTimeScale = Time.timeScale;
@@ -47,7 +48,6 @@ public class TaskManager : MonoBehaviour
             ToggleTaskPanel();
         }
 
-        // 从 PlayerController 获取当前对话的 NPC 名称
         if (playerController.IsInDialogue())
         {
             currentNPCName = playerController.GetCurrentNPCRole();
@@ -83,7 +83,7 @@ public class TaskManager : MonoBehaviour
 
     public void TriggerDeliverLetter()
     {
-        Debug.Log("TaskManager: 送信按钮被点击"); // 调试：确认按钮点击是否触发
+        Debug.Log("TaskManager: 送信按钮被点击");
 
         if (currentTask == null)
         {
@@ -97,15 +97,13 @@ public class TaskManager : MonoBehaviour
             return;
         }
 
-        if (currentTask is Task1 task1)
+        if (normalDialoguePanel != null)
         {
-            Debug.Log($"TaskManager: 准备送信给 {currentNPCName}");
-            task1.DeliverLetter(currentNPCName);
+            normalDialoguePanel.SetActive(false);
         }
-        else
-        {
-            Debug.Log("TaskManager: 当前任务不是 Task1 类型");
-        }
+
+        Debug.Log($"TaskManager: 准备送信给 {currentNPCName}");
+        currentTask.DeliverLetter(currentNPCName);
     }
 
     public void UpdateTaskDisplay()
@@ -122,5 +120,15 @@ public class TaskManager : MonoBehaviour
         if (currentTask != null) Destroy(currentTask);
         currentTask = newTask;
         UpdateTaskDisplay();
+
+        // 为新任务添加信件（除了 Task0）
+        if (inventoryManager != null && !(newTask is Task0))
+        {
+            if (newTask is Task1)
+            {
+                inventoryManager.AddLetter(new Letter { title = "简给维克托的信", content = "维克托，我修好了一台FANLU-317，家用型号，从废墟里捡来的零件拼出来的，可能有点不稳定，但测试下来能用。我打算让它在信火村送信，辐射太强，人没法随便出门，防护服又不够，机器是目前唯一的办法。你之前提过想给伊莱亚斯写信，有的话就交给它吧，到时候我让它帮你送过去。我知道你讨厌这些科技玩意儿，觉得它们毁了一切，可这东西至少不会被辐射烧坏，能帮上点忙。我还在研究便携型骨骼支架，进度慢，但成了会给你送过去。有别的需要就写下来，它会送回来，别跟我客气。——简" });
+            }
+ 
+        }
     }
 }
