@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class CameraController : MonoBehaviour
 {
@@ -52,10 +53,7 @@ public class CameraController : MonoBehaviour
     {
         if (houseIndex >= 0 && houseIndex < housePositions.Length)
         {
-            transform.position = housePositions[houseIndex];
-            target.position = housePlayerPositions[houseIndex];
-            isIndoors = true;
-            currentHouseIndex = houseIndex;
+            StartCoroutine(FadeToHouse(houseIndex));
         }
     }
 
@@ -63,12 +61,35 @@ public class CameraController : MonoBehaviour
     {
         if (isIndoors)
         {
+            StartCoroutine(FadeToMap());
+        }
+    }
+
+    private IEnumerator FadeToHouse(int houseIndex)
+    {
+        // 淡出到黑
+        yield return StartCoroutine(FadeManager.Instance.FadeToBlack(() =>
+        {
+            // 在黑色时切换位置
+            transform.position = housePositions[houseIndex];
+            target.position = housePlayerPositions[houseIndex];
+            isIndoors = true;
+            currentHouseIndex = houseIndex;
+        }));
+    }
+
+    private IEnumerator FadeToMap()
+    {
+        // 淡出到黑
+        yield return StartCoroutine(FadeManager.Instance.FadeToBlack(() =>
+        {
+            // 在黑色时切换位置
             isIndoors = false;
             currentHouseIndex = -1;
             transform.position = new Vector3(target.position.x, target.position.y, transform.position.z) + offset;
             target.position = lastPlayerMapPosition;
             target.position = new Vector3(target.position.x, target.position.y - 1f, target.position.z);
-        }
+        }));
     }
 
     public bool IsIndoors()
