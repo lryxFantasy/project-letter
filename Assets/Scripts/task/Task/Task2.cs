@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
 
 [System.Serializable]
 public class Task2 : TaskBase
@@ -11,7 +12,11 @@ public class Task2 : TaskBase
     private TMP_Text dialogueText;
     private GameObject dialoguePanel;
     private Button nextButton;
-    private TaskManager taskManager; // 添加 TaskManager 引用
+    private TaskManager taskManager;
+
+    // 任务开始面板相关
+    private GameObject taskCompletePanel;
+    private TextMeshProUGUI taskCompleteText;
 
     public void SetupTask(TaskManager manager, GameObject panel, TMP_Text text, Button button)
     {
@@ -22,6 +27,10 @@ public class Task2 : TaskBase
         nextButton.onClick.RemoveAllListeners();
         nextButton.onClick.AddListener(NextDialogue);
         dialoguePanel.SetActive(false);
+
+        // 初始化任务开始面板并显示
+        SetupTaskCompletePanel();
+        StartCoroutine(ShowTaskStartPanel());
     }
 
     public override string GetTaskName() => "枪杆子和笔";
@@ -56,7 +65,7 @@ public class Task2 : TaskBase
         else
         {
             dialoguePanel.SetActive(false);
-            if (!letterDeliveredToElias && currentDialogue.Length > 1) // 确保是伊莱亚斯的对话
+            if (!letterDeliveredToElias && currentDialogue.Length > 1)
             {
                 letterDeliveredToElias = true;
                 if (taskManager != null && taskManager.inventoryManager != null)
@@ -76,14 +85,12 @@ public class Task2 : TaskBase
                 }
             }
 
-            // 结束对话
             PlayerController playerController = Object.FindObjectOfType<PlayerController>();
             if (playerController != null && playerController.IsInDialogue())
             {
                 playerController.EndDialogue();
             }
 
-            // 检查任务完成并切换到 Task3
             if (IsTaskComplete())
             {
                 if (taskManager != null)
@@ -113,9 +120,86 @@ public class Task2 : TaskBase
             "【伊莱亚斯·凯恩】后来，当太阳爆发的时候，当战场传来噩耗的时候，父亲带着我离开了城市，来到了信火村。",
             "【伊莱亚斯·凯恩】母亲没有跟我们一块离开，很多年后我才知道，她暴露在爆发的那瞬间的阳光下，父亲不肯告诉我……他否定我的诗歌——这是我纪念母亲的方式，因此我和他分居了。",
             "【伊莱亚斯·凯恩】他说战争毁了一切，我也知道，他腿上的伤疤是他从尸体堆中爬出的见证，可他不理解，诗是我的一切，是母亲存在过的证据。",
-            "【伊莱亚斯·凯恩】他问我过得好不好……他竟然会问这个，那个沉默的老兵，战场上的铁人，我以为他早就忘了怎么问。你知道吗，他从没说过害怕失去我。",
+            "【伊莱亚斯·凯恩】他问我过得好不好……他竟然会问这个，那个沉默的老兵，战场上的铁人，我以为他早就忘了怎么问。",
+            "【伊莱亚斯·凯恩】你知道吗，他从没像这次一样说过害怕失去我。",
             "【伊莱亚斯·凯恩】这是我给简的信，带给她吧。告诉她我想她，想她皱眉调试机器的样子，想她眼里那点冷静的光，哪怕她总笑我诗里没逻辑。",
-            "【伊莱亚斯·凯恩】你会再去找他吗？替我带句话吧，就说……我没忘他扛过的枪，但我也不会丢下我的笔。我会再给他回信的。"
+            "【伊莱亚斯·凯恩】你会再去找他吗？替我带句话吧，就说……我没忘他扛过的枪，但我也不会丢下我的笔。",
+            "【伊莱亚斯·凯恩】我会再给他回信的。"
         };
+    }
+
+    // 初始化任务完成面板
+    private void SetupTaskCompletePanel()
+    {
+        taskCompletePanel = GameObject.Find("TaskCompletePanel");
+        if (taskCompletePanel != null)
+        {
+            taskCompleteText = taskCompletePanel.GetComponentInChildren<TextMeshProUGUI>();
+            if (taskCompleteText == null)
+            {
+                Debug.LogWarning("TaskCompletePanel 中没有找到 TextMeshProUGUI 组件！");
+            }
+            else
+            {
+                CanvasGroup canvasGroup = taskCompletePanel.GetComponent<CanvasGroup>();
+                if (canvasGroup == null)
+                {
+                    canvasGroup = taskCompletePanel.AddComponent<CanvasGroup>();
+                }
+                canvasGroup.alpha = 0f;
+                taskCompletePanel.SetActive(false);
+            }
+        }
+        else
+        {
+            Debug.LogError("未找到 TaskCompletePanel，请确保场景中已存在该面板！");
+        }
+    }
+
+    // 显示任务开始提示
+    private IEnumerator ShowTaskStartPanel()
+    {
+        if (taskCompletePanel != null && taskCompleteText != null)
+        {
+            taskCompleteText.text = "任务2——枪杆子和笔";
+            taskCompletePanel.SetActive(true);
+
+            CanvasGroup canvasGroup = taskCompletePanel.GetComponent<CanvasGroup>();
+            if (canvasGroup == null)
+            {
+                canvasGroup = taskCompletePanel.AddComponent<CanvasGroup>();
+                canvasGroup.alpha = 0f;
+            }
+
+            // 淡入
+            float fadeDuration = 1f;
+            float elapsedTime = 0f;
+            while (elapsedTime < fadeDuration)
+            {
+                elapsedTime += Time.deltaTime;
+                canvasGroup.alpha = Mathf.Lerp(0f, 1f, elapsedTime / fadeDuration);
+                yield return null;
+            }
+            canvasGroup.alpha = 1f;
+
+            // 显示 2 秒
+            yield return new WaitForSecondsRealtime(2f);
+
+            // 淡出
+            elapsedTime = 0f;
+            while (elapsedTime < fadeDuration)
+            {
+                elapsedTime += Time.deltaTime;
+                canvasGroup.alpha = Mathf.Lerp(1f, 0f, elapsedTime / fadeDuration);
+                yield return null;
+            }
+            canvasGroup.alpha = 0f;
+
+            Debug.Log("任务2 开始面板已显示并隐藏");
+        }
+        else
+        {
+            Debug.LogWarning("任务完成面板或文字组件未正确初始化，无法显示任务2开始提示！");
+        }
     }
 }

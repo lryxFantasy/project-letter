@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
 
 [System.Serializable]
 public class Task7 : TaskBase
@@ -13,6 +14,10 @@ public class Task7 : TaskBase
     private Button nextButton;
     private TaskManager taskManager;
 
+    // 任务开始面板相关
+    private GameObject taskCompletePanel;
+    private TextMeshProUGUI taskCompleteText;
+
     public void SetupTask(TaskManager manager, GameObject panel, TMP_Text text, Button button)
     {
         taskManager = manager;
@@ -22,6 +27,10 @@ public class Task7 : TaskBase
         nextButton.onClick.RemoveAllListeners();
         nextButton.onClick.AddListener(NextDialogue);
         dialoguePanel.SetActive(false);
+
+        // 初始化任务开始面板并显示
+        SetupTaskCompletePanel();
+        StartCoroutine(ShowTaskStartPanel());
     }
 
     public override string GetTaskName() => "任务7名称"; // 替换为具体名称
@@ -105,5 +114,77 @@ public class Task7 : TaskBase
             "【目标NPC】对话1", // 替换为具体对话
             "【目标NPC】对话2"
         };
+    }
+
+    // 初始化任务完成面板
+    private void SetupTaskCompletePanel()
+    {
+        taskCompletePanel = GameObject.Find("TaskCompletePanel");
+        if (taskCompletePanel != null)
+        {
+            taskCompleteText = taskCompletePanel.GetComponentInChildren<TextMeshProUGUI>();
+            if (taskCompleteText == null)
+            {
+                Debug.LogWarning("TaskCompletePanel 中没有找到 TextMeshProUGUI 组件！");
+            }
+            else
+            {
+                CanvasGroup canvasGroup = taskCompletePanel.GetComponent<CanvasGroup>();
+                if (canvasGroup == null)
+                {
+                    canvasGroup = taskCompletePanel.AddComponent<CanvasGroup>();
+                }
+                canvasGroup.alpha = 0f;
+            }
+        }
+        else
+        {
+            Debug.LogError("未找到 TaskCompletePanel，请确保场景中已存在该面板！");
+        }
+    }
+
+    // 显示任务开始提示
+    private IEnumerator ShowTaskStartPanel()
+    {
+        if (taskCompletePanel != null && taskCompleteText != null)
+        {
+            taskCompleteText.text = "任务7——任务7名称"; // 替换为具体名称
+            CanvasGroup canvasGroup = taskCompletePanel.GetComponent<CanvasGroup>();
+            if (canvasGroup == null)
+            {
+                canvasGroup = taskCompletePanel.AddComponent<CanvasGroup>();
+                canvasGroup.alpha = 0f;
+            }
+
+            // 淡入
+            float fadeDuration = 1f;
+            float elapsedTime = 0f;
+            while (elapsedTime < fadeDuration)
+            {
+                elapsedTime += Time.deltaTime;
+                canvasGroup.alpha = Mathf.Lerp(0f, 1f, elapsedTime / fadeDuration);
+                yield return null;
+            }
+            canvasGroup.alpha = 1f;
+
+            // 显示 2 秒
+            yield return new WaitForSecondsRealtime(2f);
+
+            // 淡出
+            elapsedTime = 0f;
+            while (elapsedTime < fadeDuration)
+            {
+                elapsedTime += Time.deltaTime;
+                canvasGroup.alpha = Mathf.Lerp(1f, 0f, elapsedTime / fadeDuration);
+                yield return null;
+            }
+            canvasGroup.alpha = 0f;
+
+            Debug.Log("任务7 开始面板已显示并隐藏");
+        }
+        else
+        {
+            Debug.LogWarning("任务完成面板或文字组件未正确初始化，无法显示任务7开始提示！");
+        }
     }
 }

@@ -31,7 +31,7 @@ public class Task0 : TaskBase
         "简·怀特：走吧，别磨蹭，任务完成后回来找我。"
     };
 
-    private Vector3 teleportPosition = new Vector3(-7.3f, -2.5f, -6.1f); // 目标传送坐标
+    private Vector3 teleportPosition = new Vector3(-7.3f, -2.5f, -6.1f);
 
     void Start()
     {
@@ -59,14 +59,17 @@ public class Task0 : TaskBase
             {
                 taskManager.normalDialoguePanel.SetActive(false);
             }
-            StartDialogue();
+            StartCoroutine(StartDialogueWithFadeOut());
         }
     }
 
-    private void StartDialogue()
+    private IEnumerator StartDialogueWithFadeOut()
     {
+        // 直接显示对话面板
         dialoguePanel.SetActive(true);
         dialogueText.text = currentDialogue[dialogueIndex];
+        // 从黑屏淡出
+        yield return StartCoroutine(FadeManager.Instance.FadeOut(3f));
     }
 
     private void NextDialogue()
@@ -89,7 +92,7 @@ public class Task0 : TaskBase
             dialoguePanel.SetActive(false);
             TeleportPlayer();
             SetupNextTask();
-        }));
+        }, 1f));
     }
 
     private void TeleportPlayer()
@@ -116,7 +119,7 @@ public class Task0 : TaskBase
         {
             Task1 newTask = gameObject.AddComponent<Task1>();
             taskManager.SetTask(newTask);
-            newTask.SetupDialogueUI(dialoguePanel, dialogueText, nextButton); 
+            newTask.SetupDialogueUI(dialoguePanel, dialogueText, nextButton);
             taskManager.UpdateTaskDisplay();
         }
     }

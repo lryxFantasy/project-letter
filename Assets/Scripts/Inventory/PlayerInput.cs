@@ -7,7 +7,7 @@ public class PlayerInput : MonoBehaviour
     public InventoryManager inventoryManager;
     public Button inventoryButton;
     public PauseMenu pauseMenu;
-
+    public Button inventoryCloseButton;
     private float previousTimeScale;
 
     void Start()
@@ -18,6 +18,11 @@ public class PlayerInput : MonoBehaviour
         if (inventoryButton != null)
         {
             inventoryButton.onClick.AddListener(ToggleInventory);
+        }
+
+        if (inventoryCloseButton != null)
+        {
+            inventoryCloseButton.onClick.AddListener(ToggleInventory);
         }
     }
 

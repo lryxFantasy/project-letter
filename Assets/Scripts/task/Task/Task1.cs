@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
 
 [System.Serializable]
 public class Task1 : TaskBase
@@ -22,9 +23,15 @@ public class Task1 : TaskBase
     private int dialogueIndex = 0;
     private string currentResident;
 
+    // 复用 Task0 的任务完成面板
+    private GameObject taskCompletePanel;
+    private TextMeshProUGUI taskCompleteText;
+
     void Start()
     {
         visitedResidents = new bool[residents.Length];
+        SetupTaskCompletePanel(); // 初始化现有面板
+        StartCoroutine(ShowTaskStartPanel()); // 显示任务开始提示
     }
 
     public override string GetTaskName()
@@ -34,8 +41,8 @@ public class Task1 : TaskBase
 
     public override string GetTaskObjective()
     {
-        return $"拜访信火村的简以外每一位居民（{visitCount}/5），\n" +
-               $"送达【简·怀特】给【维克托·凯恩】的信：{(letterDeliveredToVictor ? "已完成" : "未完成")}，\n" +
+        return $"拜访信火村的简以外每一位居民（{visitCount}/5）\n\n" +
+               $"送达【简·怀特】给【维克托·凯恩】的信：{(letterDeliveredToVictor ? "已完成" : "未完成")}\n\n" +
                $"回去找【简·怀特】：{(returnedToJane ? "已完成" : "未完成")}";
     }
 
@@ -61,8 +68,8 @@ public class Task1 : TaskBase
         deliverButton.onClick.RemoveAllListeners();
         deliverButton.onClick.AddListener(() =>
         {
-            normalDialoguePanel.SetActive(false); // 隐藏普通对话框
-            GetComponent<TaskManager>().TriggerDeliverLetter(); // 调用TaskManager的送信方法
+            normalDialoguePanel.SetActive(false);
+            GetComponent<TaskManager>().TriggerDeliverLetter();
         });
     }
 
@@ -76,7 +83,6 @@ public class Task1 : TaskBase
             currentDialogue = GetDialogueForResident("维克托·凯恩");
             letterDeliveredToVictor = true;
             VisitResident(targetResident);
-            // 移除简的信并添加维克托的信
             TaskManager taskManager = GetComponent<TaskManager>();
             if (taskManager != null && taskManager.inventoryManager != null)
             {
@@ -148,7 +154,6 @@ public class Task1 : TaskBase
             {
                 playerController.EndDialogue();
             }
-            // 检查任务是否完成并跳转到 Task2
             if (IsTaskComplete())
             {
                 TaskManager taskManager = GetComponent<TaskManager>();
@@ -156,7 +161,7 @@ public class Task1 : TaskBase
                 {
                     Task2 newTask = gameObject.AddComponent<Task2>();
                     taskManager.SetTask(newTask);
-                    newTask.SetupTask(taskManager, dialoguePanel, dialogueText, nextButton); // 修改为 SetupTask
+                    newTask.SetupTask(taskManager, dialoguePanel, dialogueText, nextButton);
                     taskManager.UpdateTaskDisplay();
                 }
             }
@@ -169,6 +174,82 @@ public class Task1 : TaskBase
         if (manager != null)
         {
             manager.UpdateTaskDisplay();
+        }
+    }
+
+    // 初始化现有任务完成面板
+    private void SetupTaskCompletePanel()
+    {
+        taskCompletePanel = GameObject.Find("TaskCompletePanel");
+        if (taskCompletePanel != null)
+        {
+            taskCompleteText = taskCompletePanel.GetComponentInChildren<TextMeshProUGUI>();
+            if (taskCompleteText == null)
+            {
+                Debug.LogWarning("TaskCompletePanel 中没有找到 TextMeshProUGUI 组件！");
+            }
+            else
+            {
+                // 添加 CanvasGroup 用于淡入淡出
+                CanvasGroup canvasGroup = taskCompletePanel.GetComponent<CanvasGroup>();
+                if (canvasGroup == null)
+                {
+                    canvasGroup = taskCompletePanel.AddComponent<CanvasGroup>();
+                }
+                canvasGroup.alpha = 0f; // 初始透明
+                taskCompletePanel.SetActive(false);
+            }
+        }
+        else
+        {
+            Debug.LogError("未找到 TaskCompletePanel，请确保 Task0 已创建该面板！");
+        }
+    }
+
+    // 显示任务开始提示（复用 taskCompletePanel）
+    private IEnumerator ShowTaskStartPanel()
+    {
+        if (taskCompletePanel != null && taskCompleteText != null)
+        {
+            taskCompleteText.text = "任务1——信火村的第一封信";
+            taskCompletePanel.SetActive(true);
+
+            CanvasGroup canvasGroup = taskCompletePanel.GetComponent<CanvasGroup>();
+            if (canvasGroup == null)
+            {
+                canvasGroup = taskCompletePanel.AddComponent<CanvasGroup>();
+                canvasGroup.alpha = 0f;
+            }
+
+            // 淡入
+            float fadeDuration = 1f;
+            float elapsedTime = 0f;
+            while (elapsedTime < fadeDuration)
+            {
+                elapsedTime += Time.deltaTime;
+                canvasGroup.alpha = Mathf.Lerp(0f, 1f, elapsedTime / fadeDuration);
+                yield return null;
+            }
+            canvasGroup.alpha = 1f;
+
+            // 显示 2 秒
+            yield return new WaitForSecondsRealtime(2f);
+
+            // 淡出
+            elapsedTime = 0f;
+            while (elapsedTime < fadeDuration)
+            {
+                elapsedTime += Time.deltaTime;
+                canvasGroup.alpha = Mathf.Lerp(1f, 0f, elapsedTime / fadeDuration);
+                yield return null;
+            }
+            canvasGroup.alpha = 0f;
+
+            Debug.Log("任务1 开始面板已显示并隐藏");
+        }
+        else
+        {
+            Debug.LogWarning("任务完成面板或文字组件未正确初始化，无法显示任务1开始提示！");
         }
     }
 
