@@ -41,13 +41,14 @@ public class PlayerController : MonoBehaviour
     private List<Button> optionButtons = new List<Button>();
     private Dictionary<string, int> npcFavorability = new Dictionary<string, int>(); // NPCºÃ¸Ð¶È
 
-    [System.Serializable] private class RequestBody { public string model = "qwen-plus-2025-01-25"; public Message[] messages; public float temperature = 1.2f; }
+    [System.Serializable] private class RequestBody { public string model = "qwen-turbo"; public Message[] messages; public float temperature = 1.2f; }
     [System.Serializable] public class Message { public string role; public string content; }
     [System.Serializable] public class QwenResponse { public Choice[] choices; }
     [System.Serializable] public class Choice { public Message message; }
 
     void Start()
     {
+
         mainCamera = Camera.main;
         interactionText.gameObject.SetActive(false);
         dialoguePanel.SetActive(false);

@@ -3,24 +3,22 @@ using System.Collections;
 
 public class HouseTrigger : MonoBehaviour
 {
-    public CameraController cameraController; // 引用相机控制脚本
-    public int houseIndex; // 这个门的房屋索引（0-5，对应六个房屋）
-    public bool isExitDoor = false; // 是否是房屋内的出口门
-    private bool playerInTrigger = false; // 跟踪玩家是否在触发区域内
-    private PlayerController playerController; // 引用玩家控制器
-    private TaskManager taskManager; // 引用 TaskManager
-    private bool isShowingMessage = false; // 跟踪是否正在显示提示信息
+    public CameraController cameraController;
+    public int houseIndex; // 房屋索引
+    public bool isExitDoor = false; // 是否为出口
+    private bool playerInTrigger = false;
+    private PlayerController playerController;
+    private TaskManager taskManager;
+    private bool isShowingMessage = false;
 
     void Start()
     {
-        // 获取 PlayerController 引用
         playerController = FindObjectOfType<PlayerController>();
         if (playerController == null)
         {
             Debug.LogError("HouseTrigger: 未找到 PlayerController！");
         }
 
-        // 获取 TaskManager 引用
         taskManager = FindObjectOfType<TaskManager>();
         if (taskManager == null)
         {
@@ -47,6 +45,7 @@ public class HouseTrigger : MonoBehaviour
 
     void Update()
     {
+        // 处理玩家交互
         if (playerInTrigger && Input.GetKeyDown(KeyCode.E))
         {
             if (cameraController == null)
@@ -57,12 +56,13 @@ public class HouseTrigger : MonoBehaviour
 
             if (!cameraController.IsIndoors() && !isExitDoor)
             {
-                // 如果是社区中心房子（houseIndex == 0），检查钥匙
-                if (houseIndex == 0)
+                if (houseIndex == 0) // 社区中心需要钥匙
                 {
                     if (HasKey())
                     {
                         cameraController.EnterHouse(houseIndex);
+                        // 更新最后房屋位置
+                        FindObjectOfType<RubyController>().UpdateLastHousePosition(cameraController.housePlayerPositions[houseIndex]);
                         Debug.Log("玩家持有钥匙，进入社区中心");
                     }
                     else
@@ -73,8 +73,8 @@ public class HouseTrigger : MonoBehaviour
                 }
                 else
                 {
-                    // 其他房屋直接进入
                     cameraController.EnterHouse(houseIndex);
+                    FindObjectOfType<RubyController>().UpdateLastHousePosition(cameraController.housePlayerPositions[houseIndex]);
                 }
             }
             else if (cameraController.IsIndoors() && isExitDoor)
@@ -84,7 +84,7 @@ public class HouseTrigger : MonoBehaviour
         }
     }
 
-    // 检查玩家是否持有钥匙
+    // 检查是否有钥匙
     private bool HasKey()
     {
         if (playerController == null || taskManager == null || taskManager.inventoryManager == null)
@@ -93,10 +93,9 @@ public class HouseTrigger : MonoBehaviour
             return false;
         }
 
-        // 检查背包中是否有钥匙
         foreach (var letter in taskManager.inventoryManager.letters)
         {
-            if (letter.title == "废弃房屋的钥匙") // 替换为实际的钥匙标题
+            if (letter.title == "废弃房屋的钥匙")
             {
                 return true;
             }
@@ -104,12 +103,10 @@ public class HouseTrigger : MonoBehaviour
         return false;
     }
 
-    // 显示“需要钥匙”的提示信息
     private void ShowNoKeyMessage()
     {
         if (playerController == null) return;
 
-        // 使用 PlayerController 的交互提示文本显示信息
         if (!isShowingMessage)
         {
             isShowingMessage = true;
@@ -119,12 +116,10 @@ public class HouseTrigger : MonoBehaviour
             playerController.GetInteractionText().CrossFadeAlpha(1f, 0.1f, false);
             playerController.GetBottomSprite().CrossFadeAlpha(1f, 0.1f, false);
 
-            // 3秒后隐藏提示
             StartCoroutine(HideMessageAfterDelay(3f));
         }
     }
 
-    // 隐藏提示信息
     private IEnumerator HideMessageAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);

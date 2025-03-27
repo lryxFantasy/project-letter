@@ -3,17 +3,18 @@ using System.Collections;
 
 public class CameraController : MonoBehaviour
 {
-    public Transform target;
-    public Vector3 offset;
-    public Vector3[] housePositions;
-    public Vector3[] housePlayerPositions;
-    public bool isIndoors = false;          // 改为公共字段
-    public int currentHouseIndex = -1;      // 改为公共字段
+    public Transform target; // 相机跟随的目标
+    public Vector3 offset; // 相机偏移
+    public Vector3[] housePositions; // 房屋内的相机位置
+    public Vector3[] housePlayerPositions; // 房屋内的玩家位置
+    public bool isIndoors = false; // 是否在室内
+    public int currentHouseIndex = -1; // 当前房屋索引
     private Vector3 mapPosition;
-    public Vector3 lastPlayerMapPosition;   // 改为公共字段
+    public Vector3 lastPlayerMapPosition; // 玩家最后在地图上的位置
 
     void Start()
     {
+        // 初始化房屋位置数组
         if (housePositions == null || housePositions.Length == 0)
         {
             housePositions = new Vector3[6];
@@ -25,6 +26,7 @@ public class CameraController : MonoBehaviour
             housePositions[5] = new Vector3(600, 0, -10);
         }
 
+        // 初始化玩家在房屋中的位置数组
         if (housePlayerPositions == null || housePlayerPositions.Length == 0)
         {
             housePlayerPositions = new Vector3[6];
@@ -41,6 +43,7 @@ public class CameraController : MonoBehaviour
 
     void LateUpdate()
     {
+        // 室外时跟随玩家
         if (target != null && !isIndoors)
         {
             Vector3 targetPosition = new Vector3(target.position.x, target.position.y, transform.position.z) + offset;
@@ -49,6 +52,7 @@ public class CameraController : MonoBehaviour
         }
     }
 
+    // 进入房屋
     public void EnterHouse(int houseIndex)
     {
         if (houseIndex >= 0 && houseIndex < housePositions.Length)
@@ -57,6 +61,7 @@ public class CameraController : MonoBehaviour
         }
     }
 
+    // 离开房屋
     public void ExitHouse()
     {
         if (isIndoors)
@@ -67,10 +72,8 @@ public class CameraController : MonoBehaviour
 
     private IEnumerator FadeToHouse(int houseIndex)
     {
-        // 淡出到黑
         yield return StartCoroutine(FadeManager.Instance.FadeToBlack(() =>
         {
-            // 在黑色时切换位置
             transform.position = housePositions[houseIndex];
             target.position = housePlayerPositions[houseIndex];
             isIndoors = true;
@@ -80,10 +83,8 @@ public class CameraController : MonoBehaviour
 
     private IEnumerator FadeToMap()
     {
-        // 淡出到黑
         yield return StartCoroutine(FadeManager.Instance.FadeToBlack(() =>
         {
-            // 在黑色时切换位置
             isIndoors = false;
             currentHouseIndex = -1;
             transform.position = new Vector3(target.position.x, target.position.y, transform.position.z) + offset;

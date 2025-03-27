@@ -46,9 +46,32 @@ public class InventoryManager : MonoBehaviour
         foreach (Letter letter in letters)
         {
             GameObject slot = Instantiate(itemSlotPrefab, gridTransform);
-            slot.GetComponentInChildren<TMP_Text>().text = letter.title;
+
+            // 设置标题
+            TMP_Text titleText = slot.GetComponentInChildren<TMP_Text>();
+            if (titleText != null)
+            {
+                titleText.text = letter.title;
+            }
+
+            // 设置图标
+            UnityEngine.UI.Image iconImage = slot.transform.Find("Icon")?.GetComponent<UnityEngine.UI.Image>();
+            if (iconImage != null)
+            {
+                iconImage.sprite = letter.icon;
+                iconImage.gameObject.SetActive(letter.icon != null); // 如果没有图标，隐藏 Image
+            }
+            else
+            {
+                Debug.LogWarning("ItemSlotPrefab 中未找到名为 'Icon' 的 Image 组件！");
+            }
+
+            // 设置按钮点击事件
             UnityEngine.UI.Button button = slot.GetComponent<UnityEngine.UI.Button>();
-            button.onClick.AddListener(() => ShowLetterDetail(letter));
+            if (button != null)
+            {
+                button.onClick.AddListener(() => ShowLetterDetail(letter));
+            }
         }
     }
 

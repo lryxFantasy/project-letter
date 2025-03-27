@@ -6,11 +6,11 @@ using System.Collections;
 [System.Serializable]
 public class Task1 : TaskBase
 {
-    [SerializeField] private int visitCount = 0;
-    [SerializeField] private bool letterDeliveredToVictor = false;
-    [SerializeField] private bool returnedToJane = false;
-    [SerializeField] private string[] residents = { "维克托·凯恩", "伊莱亚斯·凯恩", "简·怀特", "萝丝", "小卢克·伍德", "伊芙·伍德" };
-    [SerializeField] private bool[] visitedResidents;
+[SerializeField] public int visitCount = 0; // 改为 public 或确保序列化
+    [SerializeField] public bool letterDeliveredToVictor = false;
+    [SerializeField] public bool returnedToJane = false;
+    [SerializeField] public string[] residents = { "维克托·凯恩", "伊莱亚斯·凯恩", "简·怀特", "萝丝", "小卢克·伍德", "伊芙·伍德" };
+    [SerializeField] public bool[] visitedResidents; // 确保数组可序列化
 
     private TMP_Text dialogueText;
     private GameObject dialoguePanel;
@@ -87,11 +87,13 @@ public class Task1 : TaskBase
             if (taskManager != null && taskManager.inventoryManager != null)
             {
                 Debug.Log("获得新信件");
+                Sprite icon = Resources.Load<Sprite>("victor"); // 从 Resources 加载图标
                 taskManager.inventoryManager.RemoveLetter("简给维克托的信");
                 taskManager.inventoryManager.AddLetter(new Letter
                 {
                     title = "维克托的信",
-                    content = "伊莱亚斯，简弄了个破机器送信，FANLU什么型号，满身锈迹，看着不顺眼，我是不喜欢这些科技玩意儿，可她说这是唯一的办法。辐射把人困住了，出不去，防护服又不够，只能靠这堆铁皮跑腿。她说修它花了两天，废墟里捡的零件，也算她有本事……你还在写那些诗吗？我知道你喜欢，从小就爱摆弄纸笔，我不明白那些有什么用，可你妈在的时候总说你有天分，说你能写出她听不懂却喜欢的句子。战争把一切都毁了，太阳没了，日子过得像鬼一样，我腿也不行了，那场战役中流弹打中我，疼得我三天没睡，我眼睁睁看着战友倒了一片，血染红了阵地，你知道的，也包括小卢克的父亲，唉……留下他们母子两人……导弹飞向太阳那天，我在指挥部，眼睁睁看着天塌下来的样子，你妈后来也撑不住辐射走了。我不知道我们的生活是否还有明天，但生活总是得继续的吧……\r\n你那边怎么样？村里人说你跟简在一块了，她脑子清楚，人挺实在，修机器的手艺没得挑，你能跟她学点东西也不坏。我不是说你那些诗没用，就是……想知道你过得好不好，毕竟你是我儿子。诗歌救不了我在战场上死去的战友，可我也不想再失去你。简说这机器靠得住，能跑得动，有话就写回来，别让我老等着。你要没空就算了，别勉强。——维克托\r\n"
+                    content = "伊莱亚斯，简弄了个破机器送信，FANLU什么型号，满身锈迹，看着不顺眼，我是不喜欢这些科技玩意儿，可她说这是唯一的办法。辐射把人困住了，出不去，防护服又不够，只能靠这堆铁皮跑腿。她说修它花了两天，废墟里捡的零件，也算她有本事……你还在写那些诗吗？我知道你喜欢，从小就爱摆弄纸笔，我不明白那些有什么用，可你妈在的时候总说你有天分，说你能写出她听不懂却喜欢的句子。战争把一切都毁了，太阳没了，日子过得像鬼一样，我腿也不行了，那场战役中流弹打中我，疼得我三天没睡，我眼睁睁看着战友倒了一片，血染红了阵地，你知道的，也包括小卢克的父亲，唉……留下他们母子两人……导弹飞向太阳那天，我在指挥部，眼睁睁看着天塌下来的样子，你妈后来也撑不住辐射走了。我不知道我们的生活是否还有明天，但生活总是得继续的吧……\r\n你那边怎么样？村里人说你跟简在一块了，她脑子清楚，人挺实在，修机器的手艺没得挑，你能跟她学点东西也不坏。我不是说你那些诗没用，就是……想知道你过得好不好，毕竟你是我儿子。诗歌救不了我在战场上死去的战友，可我也不想再失去你。简说这机器靠得住，能跑得动，有话就写回来，别让我老等着。你要没空就算了，别勉强。——维克托\r\n",
+                    icon = icon
                 });
             }
             else
@@ -107,7 +109,7 @@ public class Task1 : TaskBase
                 returnedToJane = true;
             }
         }
-        else if (System.Array.IndexOf(residents, targetResident) >= 0 && !visitedResidents[System.Array.IndexOf(residents, targetResident)])
+        else if (System.Array.IndexOf(residents, targetResident) >= 0 )
         {
             currentDialogue = GetDialogueForResident(targetResident);
             VisitResident(targetResident);

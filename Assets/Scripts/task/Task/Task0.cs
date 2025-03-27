@@ -9,6 +9,7 @@ public class Task0 : TaskBase
     private GameObject dialoguePanel;
     private Button nextButton;
 
+    private RubyController rubyController; 
     private string[] currentDialogue;
     private int dialogueIndex = 0;
     private bool hasStarted = false;
@@ -22,6 +23,12 @@ public class Task0 : TaskBase
         "简·怀特：在你的显示屏右边，有你的任务模块和信件背包。",
         "简·怀特：任务模块可以跟踪当前任务进度。",
         "简·怀特：信件背包可以查看获得的信件。",
+        "简·怀特：显示屏左上角是你的剩余电量。",
+        "简·怀特：暴露在辐射环境下会不断消耗你的电量。",
+        "简·怀特：野外的一些危险区域可能会大幅减少你的电量。",
+        "简·怀特：快没电时，可以去其他人家中寻求帮助。",
+        "简·怀特：假如你电量耗尽，那我就只能穿上防护服把你拖回我家了。",
+        "简·怀特：所以……注意你的电量，我不想浪费力气。",
         "简·怀特：我们在信火村，这地方不大，但人跟人之间……隔得挺远。",
         "简·怀特：辐射让大家没法随便出门，村里的人只能靠书信联系。",
         "简·怀特：可惜送信这事总不能让人亲自跑——防护服成本太高了。",
@@ -53,6 +60,8 @@ public class Task0 : TaskBase
     {
         if (!hasStarted)
         {
+            rubyController = FindObjectOfType<RubyController>(); // 获取 RubyController
+            rubyController.pauseHealthUpdate = true; // 暂停血量更新
             hasStarted = true;
             currentDialogue = janeDialogue;
             dialogueIndex = 0;
@@ -100,6 +109,8 @@ public class Task0 : TaskBase
     private void TeleportPlayer()
     {
         PlayerController playerController = FindObjectOfType<PlayerController>();
+        rubyController = FindObjectOfType<RubyController>(); // 获取 RubyController
+        rubyController.pauseHealthUpdate = false; // 恢复血量更新
         if (playerController != null)
         {
             playerController.transform.position = teleportPosition;
@@ -117,6 +128,7 @@ public class Task0 : TaskBase
     private void SetupNextTask()
     {
         TaskManager taskManager = GetComponent<TaskManager>();
+
         if (taskManager != null)
         {
             Task1 newTask = gameObject.AddComponent<Task1>();
