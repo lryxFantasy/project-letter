@@ -4,16 +4,17 @@ using UnityEngine.UI;
 public class PauseMenu : MonoBehaviour
 {
     public GameObject pausePanel;
-    public GameObject pauseMask; // 遮罩引用
+    public GameObject pauseMask;
     public Button pauseButton;
     public Button saveButton;
     public Button quitButton;
     public Button continueButton;
     public PlayerInput playerInput;
+    public TaskManager taskManager; // 改为引用 TaskManager
 
     private float previousTimeScale;
     private bool isPaused = false;
-    public static bool IsPaused { get; private set; } // 全局暂停状态
+    public static bool IsPaused { get; private set; }
 
     void Start()
     {
@@ -26,7 +27,7 @@ public class PauseMenu : MonoBehaviour
         continueButton.onClick.AddListener(ContinueGame);
 
         previousTimeScale = Time.timeScale;
-        IsPaused = false; // 初始化
+        IsPaused = false;
     }
 
     void Update()
@@ -49,7 +50,7 @@ public class PauseMenu : MonoBehaviour
         }
 
         isPaused = !isPaused;
-        IsPaused = isPaused; // 更新全局状态
+        IsPaused = isPaused;
 
         if (isPaused)
         {
@@ -68,13 +69,17 @@ public class PauseMenu : MonoBehaviour
 
     void SaveGame()
     {
+        if (taskManager != null)
+        {
+            taskManager.SaveGame();
+        }
         Debug.Log("游戏保存中...");
     }
 
     void QuitGame()
     {
 #if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
+        UnityEditor.EditorApplication.isPlaying = false;
 #else
         Application.Quit();
 #endif
@@ -86,6 +91,6 @@ public class PauseMenu : MonoBehaviour
         pausePanel.SetActive(false);
         pauseMask.SetActive(false);
         isPaused = false;
-        IsPaused = false; // 更新全局状态
+        IsPaused = false;
     }
 }

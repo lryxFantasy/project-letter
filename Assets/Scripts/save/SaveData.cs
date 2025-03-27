@@ -18,5 +18,5 @@ public class SaveData
     public bool isIndoors;
     public int currentHouseIndex;
     public Vector3 lastPlayerMapPosition;
-    public List<SerializableFavorability> npcFavorabilityList; // 使用 List 替代 Dictionary
+    public List<SerializableFavorability> npcFavorabilityList; // 好感度数据
 }

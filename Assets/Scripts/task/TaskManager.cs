@@ -115,7 +115,8 @@ public class TaskManager : MonoBehaviour
             taskStateJson = JsonUtility.ToJson(currentTask),
             isIndoors = cameraController?.IsIndoors() ?? false,
             currentHouseIndex = cameraController?.currentHouseIndex ?? -1,
-            lastPlayerMapPosition = cameraController?.lastPlayerMapPosition ?? Vector3.zero
+            lastPlayerMapPosition = cameraController?.lastPlayerMapPosition ?? Vector3.zero,
+            npcFavorabilityList = playerController.GetFavorabilityData() // 获取好感度数据
         };
 
         File.WriteAllText(savePath, JsonUtility.ToJson(data));
@@ -160,6 +161,9 @@ public class TaskManager : MonoBehaviour
                 ? cameraController.housePositions[data.currentHouseIndex]
                 : new Vector3(data.playerPosition.x, data.playerPosition.y, cameraController.transform.position.z) + cameraController.offset;
         }
+
+        // 加载好感度数据
+        playerController.LoadFavorabilityData(data.npcFavorabilityList);
 
         inventoryManager.letters = data.letters;
         inventoryManager.UpdateInventoryUI();

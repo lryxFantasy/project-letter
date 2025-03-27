@@ -74,7 +74,7 @@ public class Task6 : TaskBase
                     taskManager.inventoryManager.RemoveLetter("伊芙的信");
                     taskManager.inventoryManager.AddLetter(new Letter
                     {
-                        title = "神秘房子的钥匙",
+                        title = "废弃房屋的钥匙",
                         content = "老兵在家里翻出来的钥匙，似乎可以打开村子上边那座房子，也许可以看看里面有些什么。"
                     });
                 }
