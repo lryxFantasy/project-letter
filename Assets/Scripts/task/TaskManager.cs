@@ -89,7 +89,7 @@ public class TaskManager : MonoBehaviour
     {
         if (currentTask != null)
         {
-            taskTitle.text = $"ÈÎÎñ{GetTaskNumber()}£º"+ currentTask.GetTaskName();
+            taskTitle.text = currentTask.GetTaskName();
             taskObjective.text = currentTask.GetTaskObjective();
         }
     }

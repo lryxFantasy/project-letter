@@ -23690,6 +23690,7 @@ MonoBehaviour:
   quitButton: {fileID: 1288156332}
   continueButton: {fileID: 21107809}
   playerInput: {fileID: 299712438}
+  playerController: {fileID: 299712447}
 --- !u!1 &741607448
 GameObject:
   m_ObjectHideFlags: 0

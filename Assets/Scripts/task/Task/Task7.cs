@@ -33,9 +33,9 @@ public class Task7 : TaskBase
         StartCoroutine(ShowTaskStartPanel());
     }
 
-    public override string GetTaskName() => "任务7名称"; // 替换为具体名称
+    public override string GetTaskName() => "信火相传"; 
 
-    public override string GetTaskObjective() => "任务7目标描述"; // 替换为具体目标
+    public override string GetTaskObjective() => "去地图上边上锁的社区中心房子看看吧"; 
 
     public override bool IsTaskComplete() => taskCondition;
 
@@ -148,7 +148,7 @@ public class Task7 : TaskBase
     {
         if (taskCompletePanel != null && taskCompleteText != null)
         {
-            taskCompleteText.text = "任务7——任务7名称"; // 替换为具体名称
+            taskCompleteText.text = "任务7——信火相传"; // 替换为具体名称
             CanvasGroup canvasGroup = taskCompletePanel.GetComponent<CanvasGroup>();
             if (canvasGroup == null)
             {
