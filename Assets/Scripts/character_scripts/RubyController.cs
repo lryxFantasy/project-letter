@@ -30,7 +30,7 @@ public class RubyController : MonoBehaviour
     private PlayerController playerController;
     private CameraController cameraController; // 用于判断室内外状态
     private Vector3 lastHousePosition; // 记录最后进入的房子位置
-
+    private Vector3 teleportPosition = new Vector3(-7.3f, -2.5f, -6.1f);
     void Start()
     {
         rigidbody2d = GetComponent<Rigidbody2D>();
