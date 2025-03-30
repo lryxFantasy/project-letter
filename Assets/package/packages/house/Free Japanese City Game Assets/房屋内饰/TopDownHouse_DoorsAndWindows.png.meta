@@ -642,6 +642,48 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: TopDownHouse_DoorsAndWindows_26
+      rect:
+        serializedVersion: 2
+        x: 85
+        y: 110
+        width: 44
+        height: 22
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 03d251e19f0d7114492dd009fe0ac303
+      internalID: 1624772866
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TopDownHouse_DoorsAndWindows_27
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 132
+        width: 49
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 602a3212a65974b469411ee5d10946a5
+      internalID: 765027143
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -672,6 +714,8 @@ TextureImporter:
       TopDownHouse_DoorsAndWindows_23: 352013917
       TopDownHouse_DoorsAndWindows_24: 852644701
       TopDownHouse_DoorsAndWindows_25: -1399283295
+      TopDownHouse_DoorsAndWindows_26: 1624772866
+      TopDownHouse_DoorsAndWindows_27: 765027143
       TopDownHouse_DoorsAndWindows_3: -426998506
       TopDownHouse_DoorsAndWindows_4: 1422044881
       TopDownHouse_DoorsAndWindows_5: 816715715
