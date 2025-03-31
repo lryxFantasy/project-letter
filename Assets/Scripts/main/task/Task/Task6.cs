@@ -76,7 +76,7 @@ public class Task6 : TaskBase
                     taskManager.inventoryManager.AddLetter(new Letter
                     {
                         title = "废弃房屋的钥匙",
-                        content = "老兵在家里翻出来的钥匙，似乎可以打开村子上边那座房子，如果你已经做完了所有想做的事情，也许可以看看里面有些什么。",
+                        content = "老兵在家里翻出来的钥匙，似乎可以打开村子上边那座房子，如果你已经做完了所有想做的事情，和每个人都好感度大于10，也许可以看看里面有些什么。",
                         icon = icon
                     });
                 }

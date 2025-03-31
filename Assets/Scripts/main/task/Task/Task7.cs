@@ -35,7 +35,7 @@ public class Task7 : TaskBase
 
     public override string GetTaskName() => "信火相传"; 
 
-    public override string GetTaskObjective() => "去地图上边上锁的社区中心房子看看吧"; 
+    public override string GetTaskObjective() => "如果没有什么要做的事了，就去地图上边上锁的废弃房子看看吧"; 
 
     public override bool IsTaskComplete() => taskCondition;
 

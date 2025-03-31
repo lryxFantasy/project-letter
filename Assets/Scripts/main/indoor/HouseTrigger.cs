@@ -109,7 +109,7 @@ public class HouseTrigger : MonoBehaviour
 
         foreach (var favor in favorabilityData)
         {
-            if (favor.favorability <= 5)
+            if (favor.favorability <= 10)
             {
                 allFavorabilityAbove5 = false;
                 break;
@@ -118,16 +118,16 @@ public class HouseTrigger : MonoBehaviour
 
         if (allFavorabilityAbove5)
         {
-            // 好感度全部大于5，进入Good Ending
-            Debug.Log("所有NPC好感度大于5，进入Good Ending");
+            // 好感度全部大于10，进入Good Ending
+            Debug.Log("所有NPC好感度大于10，进入Good Ending");
             cameraController.EnterHouse(houseIndex); // 进入废弃房屋
             FindObjectOfType<RubyController>().UpdateLastHousePosition(cameraController.housePlayerPositions[houseIndex]);
             TriggerGoodEnding();
         }
         else
         {
-            // 存在好感度小于等于5，进入Bad Ending
-            Debug.Log("存在NPC好感度小于等于5，进入Bad Ending");
+            // 存在好感度小于等于10，进入Bad Ending
+            Debug.Log("存在NPC好感度小于等于10，进入Bad Ending");
             cameraController.EnterHouse(houseIndex); // 进入废弃房屋
             FindObjectOfType<RubyController>().UpdateLastHousePosition(cameraController.housePlayerPositions[houseIndex]);
             TriggerBadEnding();
