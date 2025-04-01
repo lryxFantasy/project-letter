@@ -104,10 +104,10 @@ public class TaskManager : MonoBehaviour
         Sprite icon = Resources.Load<Sprite>("jane"); // 从 Resources 加载图标
 
         if (inventoryManager != null && !(newTask is Task0) && newTask is Task1)
-            inventoryManager.AddLetter(new Letter 
-            { 
-                title = "简给维克托的信", 
-                content = "维克托，我修好了一台FANLU-317，家用型号，从废墟里捡来的零件拼出来的，可能有点不稳定，但测试下来能用。我打算让它在信火村送信，辐射太强，人没法随便出门，防护服又不够，机器是目前唯一的办法。你之前提过想给伊莱亚斯写信，有的话就交给它吧，到时候我让它帮你送过去。我知道你讨厌这些科技玩意儿，觉得它们毁了一切，可这东西至少不会被辐射烧坏，能帮上点忙。我还在研究便携型骨骼支架，进度慢，但成了会给你送过去。有别的需要就写下来，它会送回来，别跟我客气。——简" ,
+            inventoryManager.AddLetter(new Letter
+            {
+                title = "简给维克托的信",
+                content = "维克托，我修好了一台FANLU-317，家用型号，从废墟里捡来的零件拼出来的，可能有点不稳定，但测试下来能用。我打算让它在信火村送信，辐射太强，人没法随便出门，防护服又不够，机器是目前唯一的办法。你之前提过想给伊莱亚斯写信，有的话就交给它吧，到时候我让它帮你送过去。我知道你讨厌这些科技玩意儿，觉得它们毁了一切，可这东西至少不会被辐射烧坏，能帮上点忙。我还在研究便携型骨骼支架，进度慢，但成了会给你送过去。有别的需要就写下来，它会送回来，别跟我客气。——简",
                 icon = icon
             });
     }
@@ -162,6 +162,7 @@ public class TaskManager : MonoBehaviour
         if (cameraController != null)
         {
             playerController.transform.position = data.playerPosition;
+            playerController.enabled = true; // 显式恢复 PlayerController 的 enabled 状态
             cameraController.isIndoors = data.isIndoors;
             cameraController.currentHouseIndex = data.currentHouseIndex;
             cameraController.lastPlayerMapPosition = data.lastPlayerMapPosition;

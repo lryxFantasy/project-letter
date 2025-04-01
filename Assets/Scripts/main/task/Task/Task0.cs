@@ -9,7 +9,8 @@ public class Task0 : TaskBase
     private GameObject dialoguePanel;
     private Button nextButton;
 
-    private RubyController rubyController; 
+    private RubyController rubyController;
+    private PlayerController playerController;
     private string[] currentDialogue;
     private int dialogueIndex = 0;
     private bool hasStarted = false;
@@ -60,8 +61,9 @@ public class Task0 : TaskBase
     {
         if (!hasStarted)
         {
-            rubyController = FindObjectOfType<RubyController>(); // 获取 RubyController
-            rubyController.pauseHealthUpdate = true; // 暂停血量更新
+            rubyController = FindObjectOfType<RubyController>();
+            playerController = FindObjectOfType<PlayerController>();
+            rubyController.pauseHealthUpdate = true;
             hasStarted = true;
             currentDialogue = janeDialogue;
             dialogueIndex = 0;
@@ -76,10 +78,12 @@ public class Task0 : TaskBase
 
     private IEnumerator StartDialogueWithFadeOut()
     {
-        // 直接显示对话面板
+        if (playerController != null)
+        {
+            playerController.enabled = false; // 禁用 PlayerController
+        }
         dialoguePanel.SetActive(true);
         dialogueText.text = currentDialogue[dialogueIndex];
-        // 从黑屏淡出
         yield return StartCoroutine(FadeManager.Instance.FadeOut(3f));
     }
 
@@ -108,12 +112,12 @@ public class Task0 : TaskBase
 
     private void TeleportPlayer()
     {
-        PlayerController playerController = FindObjectOfType<PlayerController>();
-        rubyController = FindObjectOfType<RubyController>(); // 获取 RubyController
-        rubyController.pauseHealthUpdate = false; // 恢复血量更新
+        rubyController = FindObjectOfType<RubyController>();
+        rubyController.pauseHealthUpdate = false;
         if (playerController != null)
         {
             playerController.transform.position = teleportPosition;
+            playerController.enabled = true; // 恢复 PlayerController
             if (playerController.IsInDialogue())
             {
                 playerController.EndDialogue();
@@ -128,7 +132,6 @@ public class Task0 : TaskBase
     private void SetupNextTask()
     {
         TaskManager taskManager = GetComponent<TaskManager>();
-
         if (taskManager != null)
         {
             Task1 newTask = gameObject.AddComponent<Task1>();
