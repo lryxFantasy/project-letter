@@ -13,6 +13,9 @@ public class RubyController : MonoBehaviour
     public TextMeshProUGUI healthText;
     public bool pauseHealthUpdate = false; // 新增变量，用于暂停血量更新
 
+    public GameObject deathPanel; // 在 Inspector 中拖入死亡面板
+    public Button continueButton; // 在 Inspector 中拖入继续按钮
+
     public int health { get { return currentHealth; } }
     int currentHealth;
 
@@ -28,7 +31,7 @@ public class RubyController : MonoBehaviour
 
     public GameObject projectilePrefab;
     private PlayerController playerController;
-    private CameraController cameraController; // 用于判断室内外状态
+    public CameraController cameraController; // 用于判断室内外状态
     private Vector3 lastHousePosition; // 记录最后进入的房子位置
     private Vector3 teleportPosition = new Vector3(-7.3f, -2.5f, -6.1f);
     void Start()
@@ -39,19 +42,26 @@ public class RubyController : MonoBehaviour
 
         playerController = GetComponent<PlayerController>();
         cameraController = FindObjectOfType<CameraController>();
-        if (playerController == null) Debug.LogError("PlayerController组件未找到！");
-        if (cameraController == null) Debug.LogError("CameraController组件未找到！");
 
-        // 初始化血量条
+        // 初始化血量UI
         if (healthBar != null)
         {
             healthBar.maxValue = maxHealth;
             healthBar.value = currentHealth;
         }
-        // 初始化血量文字
         UpdateHealthText();
 
-        StartCoroutine(HealthUpdateRoutine()); // 开始血量更新协程
+        // 初始化死亡面板
+        if (deathPanel != null)
+        {
+            deathPanel.SetActive(false); // 游戏开始时隐藏死亡面板
+            if (continueButton != null)
+            {
+                continueButton.onClick.AddListener(OnContinueClicked); // 添加按钮点击事件
+            }
+        }
+
+        StartCoroutine(HealthUpdateRoutine());
     }
 
     void Update()
@@ -130,13 +140,13 @@ public class RubyController : MonoBehaviour
             {
                 if (cameraController != null)
                 {
-                    if (!cameraController.IsIndoors() && currentHealth > 0) // 室外每秒-4血
+                    if (!cameraController.IsIndoors() && currentHealth > 0) // 室外每秒-1血
                     {
-                        ChangeHealth(-2);
+                        ChangeHealth(-1);
                     }
-                    else if (cameraController.IsIndoors() && currentHealth < maxHealth) // 室内每秒+5血
+                    else if (cameraController.IsIndoors() && currentHealth < maxHealth) // 室内每秒+10血
                     {
-                        ChangeHealth(4);
+                        ChangeHealth(10);
                     }
                 }
             }
@@ -145,34 +155,37 @@ public class RubyController : MonoBehaviour
     }
 
     // 修改血量方法
-    public void ChangeHealth(int amount)
+    public void ChangeHealth(int amount, bool isRadiationDamage = false)
     {
+        Debug.Log($"ChangeHealth called with amount: {amount}, isRadiationDamage: {isRadiationDamage}");
         if (amount < 0)
         {
-            if (isInvincible) return;
-            isInvincible = true;
-            invincibleTimer = timeInvincible;
-            //animator.SetTrigger("Hit");
+            if (isInvincible && !isRadiationDamage) // 辐射伤害绕过无敌状态
+            {
+                Debug.Log("Damage blocked due to invincibility");
+                return;
+            }
+            if (!isRadiationDamage) // 仅非辐射伤害触发无敌
+            {
+                isInvincible = true;
+                invincibleTimer = timeInvincible;
+                //animator.SetTrigger("Hit");
+            }
         }
 
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
+        Debug.Log($"New health: {currentHealth}/{maxHealth}");
 
-        // 更新血量条UI
         if (healthBar != null)
         {
             healthBar.value = currentHealth;
         }
-
-        // 更新血量文字
         UpdateHealthText();
 
-        // 检查是否死亡
         if (currentHealth <= 0)
         {
             StartCoroutine(DieAndRespawn());
         }
-
-        Debug.Log(currentHealth + "/" + maxHealth);
     }
 
     // 更新血量文字的方法
@@ -187,29 +200,51 @@ public class RubyController : MonoBehaviour
     // 死亡和重生逻辑
     private IEnumerator DieAndRespawn()
     {
+        // 淡入黑色并显示死亡面板
         yield return StartCoroutine(FadeManager.Instance.FadeToBlack(() =>
         {
-            // 始终复活在房屋1（索引1）
-            if (cameraController != null && cameraController.housePlayerPositions.Length > 1)
+            if (deathPanel != null)
             {
-                transform.position = cameraController.housePlayerPositions[1]; // 玩家复活在房屋1的玩家位置
-                cameraController.transform.position = cameraController.housePositions[1]; // 相机移动到房屋1的相机位置
-                cameraController.isIndoors = true; // 设置为室内状态
-                cameraController.currentHouseIndex = 1; // 更新当前房屋索引为1
+                Time.timeScale = 0f; // 暂停游戏时间
+                deathPanel.SetActive(true);
+                pauseHealthUpdate = true; // 暂停血量更新
             }
-            else
-            {
-                transform.position = Vector3.zero; // 如果没有房屋1，默认初始位置
-            }
-
-            // 重置血量
-            currentHealth = maxHealth;
-            if (healthBar != null)
-            {
-                healthBar.value = currentHealth;
-            }
-            UpdateHealthText(); // 更新文字显示
         }));
+    }
+
+    // 继续游戏按钮的点击事件
+    private void OnContinueClicked()
+    {
+        Time.timeScale = 1f; // 恢复游戏时间
+
+        // 重生逻辑
+        if (cameraController != null && cameraController.housePlayerPositions.Length > 1)
+        {
+            transform.position = cameraController.housePlayerPositions[1];
+            cameraController.transform.position = cameraController.housePositions[1];
+            cameraController.isIndoors = true;
+            cameraController.currentHouseIndex = 1;
+        }
+        else
+        {
+            transform.position = Vector3.zero;
+        }
+
+        // 重置血量
+        currentHealth = maxHealth;
+        if (healthBar != null)
+        {
+            healthBar.value = currentHealth;
+        }
+        UpdateHealthText();
+
+        // 隐藏死亡面板
+        if (deathPanel != null)
+        {
+            deathPanel.SetActive(false);
+        }
+        pauseHealthUpdate = false; // 恢复血量更新
+
     }
 
     public void UpdateLastHousePosition(Vector3 position)
