@@ -3,16 +3,17 @@ using System.Collections;
 
 public class CameraController : MonoBehaviour
 {
-    public Transform target; // 相机跟随的目标
-    public Vector3 offset; // 相机偏移
-    public Vector3[] housePositions; // 房屋内的相机位置
-    public Vector3[] housePlayerPositions; // 房屋内的玩家位置
-    public bool isIndoors = false; // 是否在室内
-    public int currentHouseIndex = -1; // 当前房屋索引
+    public Transform target;
+    public Vector3 offset;
+    public Vector3[] housePositions;
+    public Vector3[] housePlayerPositions;
+    public bool isIndoors = false;
+    public int currentHouseIndex = -1;
     private Vector3 mapPosition;
-    public Vector3 lastPlayerMapPosition; // 玩家最后在地图上的位置
-    private Vector3 teleportPosition = new Vector3(-7.3f, -2.5f, -6.1f); // 传送位置
-    private bool isTransitioning = false; // 过渡状态锁
+    public Vector3 lastPlayerMapPosition;
+    private Vector3 teleportPosition = new Vector3(-7.3f, -2.5f, -6.1f);
+    private bool isTransitioning = false;
+    private bool isInitialExit = true;
 
     void Start()
     {
@@ -39,7 +40,8 @@ public class CameraController : MonoBehaviour
         }
 
         mapPosition = transform.position;
-
+        isIndoors = true;
+        lastPlayerMapPosition = teleportPosition;
     }
 
     void LateUpdate()
@@ -59,10 +61,12 @@ public class CameraController : MonoBehaviour
             if (!isTransitioning)
             {
                 StartCoroutine(FadeToHouse(houseIndex));
+                if (SFXManager.Instance != null)
+                {
+                    SFXManager.Instance.PlayDoorOpenSound(); // 进入房屋时播放开门音效
+                }
             }
-
         }
-
     }
 
     public void ExitHouse()
@@ -70,8 +74,11 @@ public class CameraController : MonoBehaviour
         if (isIndoors && !isTransitioning)
         {
             StartCoroutine(FadeToMap());
+            if (SFXManager.Instance != null)
+            {
+                SFXManager.Instance.PlayDoorOpenSound(); // 进入房屋时播放开门音效
+            }
         }
-
     }
 
     private IEnumerator FadeToHouse(int houseIndex)
@@ -93,7 +100,12 @@ public class CameraController : MonoBehaviour
         yield return StartCoroutine(FadeManager.Instance.FadeToBlack(() =>
         {
             isIndoors = false;
-            if (currentHouseIndex == 1)
+            if (isInitialExit)
+            {
+                target.position = teleportPosition;
+                isInitialExit = false;
+            }
+            else if (currentHouseIndex == 1)
             {
                 target.position = teleportPosition;
                 Debug.Log($"Teleporting to: {teleportPosition}");

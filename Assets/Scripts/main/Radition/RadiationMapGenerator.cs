@@ -23,8 +23,8 @@ public class RadiationMapGenerator : MonoBehaviour
 
             // 随机设置最大辐射值
             RadiationZone radiationZone = zone.GetComponent<RadiationZone>();
-            radiationZone.maxRadiation = Random.Range(100f, 500f); // 每个区域圆心辐射值随机
-            radiationZone.radius = 6f;
+            radiationZone.maxRadiation = Random.Range(100f, 700f); // 每个区域圆心辐射值随机
+            radiationZone.radius = 3f;
 
             // 同步碰撞器半径
             CircleCollider2D collider = zone.GetComponent<CircleCollider2D>();

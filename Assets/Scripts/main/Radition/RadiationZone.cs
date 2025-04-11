@@ -3,7 +3,7 @@ using TMPro;
 
 public class RadiationZone : MonoBehaviour
 {
-    public float maxRadiation = 500f;   // 圆心最大辐射强度 (μSv/h)
+    public float maxRadiation = 700f;   // 圆心最大辐射强度 (μSv/h)
     public float radius = 3f;           // 辐射区域半径
     private float radiationStrength;    // 当前位置的辐射强度（动态计算）
     private RubyController player;      // 玩家引用
@@ -50,7 +50,7 @@ public class RadiationZone : MonoBehaviour
         }
         transform.position = Vector2.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
 
-        if (Input.GetKey(KeyCode.Q) && radiationSprite != null)
+        if (Input.GetKey(KeyCode.Space) && radiationSprite != null)
         {
             radiationSprite.enabled = true;
         }
@@ -133,7 +133,7 @@ public class RadiationZone : MonoBehaviour
     {
         if (radiationSprite != null)
         {
-            radiationSprite.color = Color.Lerp(Color.green, Color.red, maxRadiation / 500f);
+            radiationSprite.color = Color.Lerp(Color.green, Color.red, maxRadiation / 700f);
         }
     }
 

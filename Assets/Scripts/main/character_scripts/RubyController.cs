@@ -34,6 +34,7 @@ public class RubyController : MonoBehaviour
     public CameraController cameraController; // 用于判断室内外状态
     private Vector3 lastHousePosition; // 记录最后进入的房子位置
     private Vector3 teleportPosition = new Vector3(-7.3f, -2.5f, -6.1f);
+
     void Start()
     {
         rigidbody2d = GetComponent<Rigidbody2D>();
@@ -72,6 +73,10 @@ public class RubyController : MonoBehaviour
             horizontal = 0f;
             vertical = 0f;
             animator.SetBool("IsRunning", false);
+            if (SFXManager.Instance != null)
+            {
+                SFXManager.Instance.SetWalkSound(false); // 停止走路音效
+            }
             return;
         }
 
@@ -94,6 +99,13 @@ public class RubyController : MonoBehaviour
         else
         {
             animator.SetBool("IsRunning", false);
+        }
+
+        // 控制走路音效
+        bool isMoving = move.magnitude > 0.1f;
+        if (SFXManager.Instance != null)
+        {
+            SFXManager.Instance.SetWalkSound(isMoving);
         }
 
         if (horizontal > 0)
@@ -140,9 +152,9 @@ public class RubyController : MonoBehaviour
             {
                 if (cameraController != null)
                 {
-                    if (!cameraController.IsIndoors() && currentHealth > 0) // 室外每秒-1血
+                    if (!cameraController.IsIndoors() && currentHealth > 0) // 室外每秒-2血
                     {
-                        ChangeHealth(-1);
+                        ChangeHealth(-2);
                     }
                     else if (cameraController.IsIndoors() && currentHealth < maxHealth) // 室内每秒+10血
                     {
@@ -244,7 +256,6 @@ public class RubyController : MonoBehaviour
             deathPanel.SetActive(false);
         }
         pauseHealthUpdate = false; // 恢复血量更新
-
     }
 
     public void UpdateLastHousePosition(Vector3 position)

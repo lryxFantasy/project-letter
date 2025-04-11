@@ -27,7 +27,7 @@ public class Task0 : TaskBase
         "简·怀特：显示屏左上角是你的剩余电量。",
         "简·怀特：你还可以查看你所处环境的辐射值。",
         "简·怀特：暴露在辐射环境下会不断消耗你的电量。",
-        "简·怀特：我帮你安了个盖革计数器，按q可以查看周围的辐射区域。",
+        "简·怀特：我帮你安了个盖革计数器，按空格键可以查看周围的辐射区域。",
         "简·怀特：千万不要走进辐射区域里，这是自寻死路。",
         "简·怀特：快没电时，可以去其他人家中寻求帮助。",
         "简·怀特：假如你电量耗尽，那我就只能穿上防护服把你拖回我家了。",
@@ -47,6 +47,16 @@ public class Task0 : TaskBase
 
     void Start()
     {
+        // 确保初始音乐正确
+        AudioManager audioManager = AudioManager.Instance;
+        if (audioManager != null)
+        {
+            CameraController cameraController = FindObjectOfType<CameraController>();
+            if (cameraController != null && cameraController.IsIndoors())
+            {
+                audioManager.ForceSwitchBGM(true); // 强制播放屋内音乐
+            }
+        }
     }
 
     public void SetupDialogueUI(GameObject panel, TMP_Text text, Button button)
@@ -82,7 +92,7 @@ public class Task0 : TaskBase
     {
         if (playerController != null)
         {
-            playerController.enabled = false; // 禁用 PlayerController
+            playerController.enabled = false;
         }
         dialoguePanel.SetActive(true);
         dialogueText.text = currentDialogue[dialogueIndex];
@@ -109,6 +119,20 @@ public class Task0 : TaskBase
             dialoguePanel.SetActive(false);
             TeleportPlayer();
             SetupNextTask();
+
+            // 切换到屋外音乐
+            AudioManager audioManager = AudioManager.Instance;
+            if (audioManager != null)
+            {
+                audioManager.ForceSwitchBGM(false); // 强制播放屋外音乐
+            }
+
+            // 更新 CameraController 的 isIndoors 状态
+            CameraController cameraController = FindObjectOfType<CameraController>();
+            if (cameraController != null)
+            {
+                cameraController.ExitHouse(); // 模拟退出房屋，设置 isIndoors = false
+            }
         }, 1f));
     }
 
@@ -119,7 +143,7 @@ public class Task0 : TaskBase
         if (playerController != null)
         {
             playerController.transform.position = teleportPosition;
-            playerController.enabled = true; // 恢复 PlayerController
+            playerController.enabled = true;
             if (playerController.IsInDialogue())
             {
                 playerController.EndDialogue();
