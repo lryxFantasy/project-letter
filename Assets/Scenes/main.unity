@@ -123458,7 +123458,7 @@ MonoBehaviour:
   spaceReleaseSound: {fileID: 8300000, guid: cee6a20f16ec55d4eb7d23ec504310e1, type: 3}
   walkSound: {fileID: 8300000, guid: cf80b603a4e874d42bb08fd212e5a8ee, type: 3}
   doorOpenSound: {fileID: 8300000, guid: b6e1f30c6791cf5489ee75a24474aa5e, type: 3}
-  sfxVolume: 0.7
+  sfxVolume: 0.3
   walkVolume: 0.7
 --- !u!1001 &1669503319
 PrefabInstance:
