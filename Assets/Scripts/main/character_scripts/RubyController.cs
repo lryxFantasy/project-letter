@@ -34,6 +34,9 @@ public class RubyController : MonoBehaviour
     public CameraController cameraController; // 用于判断室内外状态
     private Vector3 lastHousePosition; // 记录最后进入的房子位置
     private Vector3 teleportPosition = new Vector3(-7.3f, -2.5f, -6.1f);
+    private bool isShieldActive = false; // 护盾状态，阻止所有伤害
+    private float shieldTimer = 0f; // 剩余护盾时间
+    [SerializeField] private SpriteRenderer shieldSprite; // 护盾精灵，显示护盾效果
 
     void Start()
     {
@@ -60,6 +63,12 @@ public class RubyController : MonoBehaviour
             {
                 continueButton.onClick.AddListener(OnContinueClicked); // 添加按钮点击事件
             }
+        }
+
+        // 初始化护盾精灵
+        if (shieldSprite != null)
+        {
+            shieldSprite.enabled = false; // 初始隐藏护盾
         }
 
         StartCoroutine(HealthUpdateRoutine());
@@ -148,13 +157,13 @@ public class RubyController : MonoBehaviour
     {
         while (true)
         {
-            if (!pauseHealthUpdate) // 只有在未暂停时才更新血量
+            if (!pauseHealthUpdate && !isShieldActive) // 护盾期间不扣血
             {
                 if (cameraController != null)
                 {
                     if (!cameraController.IsIndoors() && currentHealth > 0) // 室外每秒-2血
                     {
-                        ChangeHealth(-2);
+                        ChangeHealth(-2, true); // 标记为辐射伤害
                     }
                     else if (cameraController.IsIndoors() && currentHealth < maxHealth) // 室内每秒+10血
                     {
@@ -172,13 +181,20 @@ public class RubyController : MonoBehaviour
         Debug.Log($"ChangeHealth called with amount: {amount}, isRadiationDamage: {isRadiationDamage}");
         if (amount < 0)
         {
-            if (isInvincible && !isRadiationDamage) // 辐射伤害绕过无敌状态
+            // 护盾屏蔽所有伤害，包括辐射伤害
+            if (isShieldActive)
             {
-                Debug.Log("Damage blocked due to invincibility");
+                Debug.Log("Damage blocked due to shield");
                 return;
             }
-            if (!isRadiationDamage) // 仅非辐射伤害触发无敌
+            // 非辐射伤害触发无敌状态
+            if (!isRadiationDamage)
             {
+                if (isInvincible)
+                {
+                    Debug.Log("Damage blocked due to invincibility");
+                    return;
+                }
                 isInvincible = true;
                 invincibleTimer = timeInvincible;
                 //animator.SetTrigger("Hit");
@@ -197,6 +213,39 @@ public class RubyController : MonoBehaviour
         if (currentHealth <= 0)
         {
             StartCoroutine(DieAndRespawn());
+        }
+    }
+
+    // 激活护盾
+    public void ActivateShield(float duration)
+    {
+        shieldTimer += duration; // 累加护盾时间
+        if (!isShieldActive) // 仅在未激活时启动协程
+        {
+            StartCoroutine(ShieldCoroutine());
+        }
+    }
+
+    // 护盾协程，控制护盾状态和精灵显示
+    private IEnumerator ShieldCoroutine()
+    {
+        isShieldActive = true;
+        if (shieldSprite != null)
+        {
+            shieldSprite.enabled = true; // 显示护盾精灵
+        }
+
+        while (shieldTimer > 0)
+        {
+            shieldTimer -= Time.deltaTime;
+            yield return null;
+        }
+
+        isShieldActive = false;
+        shieldTimer = 0f; // 确保计时器归零
+        if (shieldSprite != null)
+        {
+            shieldSprite.enabled = false; // 隐藏护盾精灵
         }
     }
 
@@ -256,6 +305,14 @@ public class RubyController : MonoBehaviour
             deathPanel.SetActive(false);
         }
         pauseHealthUpdate = false; // 恢复血量更新
+
+        // 重置护盾状态
+        isShieldActive = false;
+        shieldTimer = 0f; // 重置护盾计时器
+        if (shieldSprite != null)
+        {
+            shieldSprite.enabled = false; // 确保重生时隐藏护盾
+        }
     }
 
     public void UpdateLastHousePosition(Vector3 position)

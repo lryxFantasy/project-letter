@@ -68,7 +68,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 1
+  m_Radius: 1.26
 --- !u!114 &3635866961161452241
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -82,7 +82,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxRadiation: 500
-  radius: 20
+  radius: 30
   radiationSprite: {fileID: 4723275375651542745}
   moveInterval: 2
   moveSpeed: 1
@@ -113,7 +113,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -0.0071529355}
-  m_LocalScale: {x: 0.88040423, y: 0.14922106, z: 0.14922106}
+  m_LocalScale: {x: 0.9684447, y: 0.16414317, z: 0.16414317}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 8169489979853889973}
