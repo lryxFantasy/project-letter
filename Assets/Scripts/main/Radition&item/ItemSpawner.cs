@@ -211,10 +211,6 @@ public class ItemSpawner : MonoBehaviour
             {
                 Gizmos.color = zoneItemCounts != null && zoneItemCounts.ContainsKey(zone) && zoneItemCounts[zone] >= maxItemsPerZone ? Color.red : Color.green;
                 Gizmos.DrawWireCube(zone.bounds.center, zone.bounds.size);
-                if (Application.isEditor && zoneItemCounts != null && zoneItemCounts.ContainsKey(zone))
-                {
-                    UnityEditor.Handles.Label(zone.bounds.center, $"Items: {zoneItemCounts[zone]}/{maxItemsPerZone}");
-                }
             }
         }
     }

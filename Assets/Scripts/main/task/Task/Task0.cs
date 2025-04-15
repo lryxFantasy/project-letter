@@ -9,6 +9,10 @@ public class Task0 : TaskBase
     private GameObject dialoguePanel;
     private Button nextButton;
 
+    // 引导面板相关
+    private GameObject guidePanel;
+    private Button guideContinueButton;
+
     private RubyController rubyController;
     private PlayerController playerController;
     private string[] currentDialogue;
@@ -43,7 +47,7 @@ public class Task0 : TaskBase
         "简·怀特：走吧，别磨蹭，任务完成后回来找我。"
     };
 
-    private Vector3 teleportPosition = new Vector3(-7.3f, -2.5f, -6.1f);
+    private Vector3 teleportPosition = new Vector3(-7.3f, -3.5f, -6.1f);
 
     void Start()
     {
@@ -67,6 +71,27 @@ public class Task0 : TaskBase
         nextButton.onClick.RemoveAllListeners();
         nextButton.onClick.AddListener(NextDialogue);
         dialoguePanel.SetActive(false);
+
+        // 动态查找引导面板和按钮
+        guidePanel = GameObject.Find("GuidePanel");
+        if (guidePanel != null)
+        {
+            guidePanel.SetActive(false);
+            guideContinueButton = guidePanel.GetComponentInChildren<Button>();
+            if (guideContinueButton != null)
+            {
+                guideContinueButton.onClick.RemoveAllListeners();
+                guideContinueButton.onClick.AddListener(OnGuideContinue);
+            }
+            else
+            {
+                Debug.LogWarning("GuidePanel 中未找到 Button 组件！");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("未找到 GuidePanel，可能影响引导面板显示！");
+        }
     }
 
     public void StartTaskDialogue()
@@ -108,8 +133,34 @@ public class Task0 : TaskBase
         }
         else
         {
+            dialoguePanel.SetActive(false);
+            ShowGuidePanel(); // 显示引导面板
+
+        }
+    }
+
+    private void ShowGuidePanel()
+    {
+        if (guidePanel != null)
+        {
+            guidePanel.SetActive(true);
+            Time.timeScale = 0f; // 暂停游戏时间
+        }
+        else
+        {
+            Debug.LogWarning("GuidePanel 未找到，直接进入传送！");
             StartCoroutine(TransitionAndTeleport());
         }
+    }
+
+    private void OnGuideContinue()
+    {
+        if (guidePanel != null)
+        {
+            guidePanel.SetActive(false);
+            Time.timeScale = 1f; // 恢复游戏时间
+        }
+        StartCoroutine(TransitionAndTeleport());
     }
 
     private IEnumerator TransitionAndTeleport()
@@ -162,7 +213,7 @@ public class Task0 : TaskBase
         {
             Task1 newTask = gameObject.AddComponent<Task1>();
             taskManager.SetTask(newTask);
-            newTask.SetupDialogueUI(dialoguePanel, dialogueText, nextButton);
+            newTask.SetupDialogueUI(dialoguePanel, dialogueText, nextButton); // 仅传递3个参数
             taskManager.UpdateTaskDisplay();
         }
     }

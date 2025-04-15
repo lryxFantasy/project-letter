@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement; // 用于场景管理
 
 public class SFXManager : MonoBehaviour
 {
@@ -44,6 +45,20 @@ public class SFXManager : MonoBehaviour
         ConfigureRadiationAudioSource(radiationAudioSource);
     }
 
+    void Start()
+    {
+        // 初始检查场景并设置音效状态
+        UpdateSFXState();
+        // 监听场景切换事件
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnDestroy()
+    {
+        // 移除事件监听，防止内存泄漏
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
     private void ConfigureSFXAudioSource(AudioSource source)
     {
         source.loop = false;
@@ -64,6 +79,19 @@ public class SFXManager : MonoBehaviour
         source.loop = false; // 警报音效不循环，按间隔播放
         source.playOnAwake = false;
         source.volume = radiationAlarmVolume;
+    }
+
+    private void UpdateSFXState()
+    {
+        // 检查当前场景是否为 "main"
+        bool isMainScene = SceneManager.GetActiveScene().name == "main";
+        SetSFXEnabled(isMainScene);
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // 场景加载时更新音效状态
+        UpdateSFXState();
     }
 
     void Update()
@@ -154,7 +182,7 @@ public class SFXManager : MonoBehaviour
             return;
         }
 
-        // 计算播放间隔，从 1秒（低辐射）到 0.05秒（高辐射），使用平方曲线加速变化
+        // 计算播放间隔，从 0.5秒（低辐射）到 0.05秒（高辐射），使用平方曲线加速变化
         float normalizedRadiation = Mathf.Clamp(radiation / maxRadiation, 0f, 1f);
         float curveFactor = normalizedRadiation * normalizedRadiation; // 平方曲线，高辐射时变化更快
         radiationAlarmInterval = Mathf.Lerp(0.5f, 0.05f, curveFactor);

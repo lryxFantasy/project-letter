@@ -2,7 +2,8 @@ using UnityEngine;
 using TMPro;
 using System.Collections;
 using UnityEngine.SceneManagement; // 用于场景跳转
-using UnityEngine.Audio; // 用于音频控制（可选）
+using UnityEngine.Audio; // 用于音频控制
+using UnityEngine.Video; // 用于视频播放
 
 public class FadeTextAndMoveImage : MonoBehaviour
 {
@@ -10,11 +11,7 @@ public class FadeTextAndMoveImage : MonoBehaviour
     public float fadeDuration = 1f; // 淡入淡出的持续时间
     public float displayDuration = 3f; // 每句话显示的持续时间
 
-    public RectTransform imageTransform; // 移动的图片
-    public float moveDuration = 100f; // 图片从下到上移动的总时间
-    private float startY; // 图片起始 Y 位置
-    private float endY;   // 图片结束 Y 位置
-
+    public VideoPlayer videoPlayer; // 视频播放器组件
     public AudioSource backgroundMusic; // 背景音乐的 AudioSource 组件
     public float musicFadeOutDuration = 2f; // 音乐淡出的持续时间
 
@@ -46,9 +43,9 @@ public class FadeTextAndMoveImage : MonoBehaviour
     void Start()
     {
         // 确保组件已赋值
-        if (displayText == null || imageTransform == null)
+        if (displayText == null)
         {
-            Debug.LogError("请在 Inspector 中赋值 displayText 和 imageTransform！");
+            Debug.LogError("请在 Inspector 中赋值 displayText！");
             return;
         }
         if (backgroundMusic == null)
@@ -56,19 +53,22 @@ public class FadeTextAndMoveImage : MonoBehaviour
             Debug.LogError("请在 Inspector 中赋值 backgroundMusic！");
             return;
         }
-
-        // 设置图片的起始和结束位置
-        float imageHeight = imageTransform.rect.height; // 图片高度
-        startY = -Screen.height / 2f + imageHeight / 2.8f; // 从屏幕底部开始
-        endY = Screen.height / 2f - imageHeight / 2.9f;    // 移动到屏幕顶部
-        imageTransform.anchoredPosition = new Vector2(imageTransform.anchoredPosition.x, startY);
+        if (videoPlayer == null)
+        {
+            Debug.LogError("请在 Inspector 中赋值 videoPlayer！");
+            return;
+        }
 
         // 播放背景音乐
         backgroundMusic.Play();
 
-        // 开始文本淡入淡出和图片移动
+        // 设置视频播放器
+        videoPlayer.playOnAwake = false;
+        videoPlayer.loopPointReached += OnVideoFinished; // 视频播放完成时触发事件
+
+        // 开始文本淡入淡出和视频播放
         StartCoroutine(DisplaySentences());
-        StartCoroutine(MoveImage());
+        videoPlayer.Play();
     }
 
     IEnumerator DisplaySentences()
@@ -116,25 +116,10 @@ public class FadeTextAndMoveImage : MonoBehaviour
         }
     }
 
-    IEnumerator MoveImage()
+    void OnVideoFinished(VideoPlayer vp)
     {
-        float elapsedTime = 0f;
-
-        while (elapsedTime < moveDuration)
-        {
-            elapsedTime += Time.deltaTime;
-            float t = elapsedTime / moveDuration;
-            float newY = Mathf.Lerp(startY, endY, t);
-            imageTransform.anchoredPosition = new Vector2(imageTransform.anchoredPosition.x, newY);
-            yield return null;
-        }
-
-        // 确保最终位置精确
-        imageTransform.anchoredPosition = new Vector2(imageTransform.anchoredPosition.x, endY);
-
-        // 图片移动完成后淡出音乐并跳转场景
-        yield return StartCoroutine(FadeOutMusic());
-        SceneManager.LoadScene("start"); // 跳转到 Start 场景
+        // 视频播放完成后淡出音乐并跳转场景
+        StartCoroutine(FadeOutMusic());
     }
 
     IEnumerator FadeOutMusic()
@@ -153,5 +138,8 @@ public class FadeTextAndMoveImage : MonoBehaviour
         // 确保音量最终为 0 并停止播放
         backgroundMusic.volume = 0f;
         backgroundMusic.Stop();
+
+        // 跳转到 Start 场景
+        SceneManager.LoadScene("start");
     }
 }

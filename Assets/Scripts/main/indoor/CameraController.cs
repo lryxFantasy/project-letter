@@ -13,7 +13,6 @@ public class CameraController : MonoBehaviour
     public Vector3 lastPlayerMapPosition;
     private Vector3 teleportPosition = new Vector3(-7.3f, -2.5f, -6.1f);
     private bool isTransitioning = false;
-    private bool isInitialExit = true;
 
     void Start()
     {
@@ -100,20 +99,15 @@ public class CameraController : MonoBehaviour
         yield return StartCoroutine(FadeManager.Instance.FadeToBlack(() =>
         {
             isIndoors = false;
-            if (isInitialExit)
+            if (currentHouseIndex == 1) // 1号房屋退出到 teleportPosition
             {
                 target.position = teleportPosition;
-                isInitialExit = false;
+                Debug.Log($"Exiting house 1, teleporting to: {teleportPosition}");
             }
-            else if (currentHouseIndex == 1)
+            else // 其他房屋退出到 lastPlayerMapPosition
             {
-                target.position = teleportPosition;
-                Debug.Log($"Teleporting to: {teleportPosition}");
-            }
-            else
-            {
-                target.position = lastPlayerMapPosition;
-                target.position = new Vector3(target.position.x, target.position.y - 1f, target.position.z);
+                target.position = new Vector3(lastPlayerMapPosition.x, lastPlayerMapPosition.y - 1f, lastPlayerMapPosition.z);
+                Debug.Log($"Exiting house {currentHouseIndex}, teleporting to: {lastPlayerMapPosition}");
             }
             transform.position = new Vector3(target.position.x, target.position.y, transform.position.z) + offset;
             currentHouseIndex = -1;

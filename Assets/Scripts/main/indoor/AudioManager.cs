@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using UnityEngine.SceneManagement; // 添加SceneManager命名空间
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance { get; private set; }
@@ -35,6 +35,23 @@ public class AudioManager : MonoBehaviour
         // 配置 AudioSource
         ConfigureAudioSource(mapAudioSource, mapBGM);
         ConfigureAudioSource(houseAudioSource, houseBGM);
+
+        // 监听场景加载事件
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    // 当场景加载时调用
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // 暂停所有BGM
+        mapAudioSource.Pause();
+        houseAudioSource.Pause();
+    }
+
+    // 清理事件监听（可选，防止内存泄漏）
+    void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     void Start()
