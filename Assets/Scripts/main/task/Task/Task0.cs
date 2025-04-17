@@ -12,7 +12,9 @@ public class Task0 : TaskBase
     // 引导面板相关
     private GameObject guidePanel;
     private Button guideContinueButton;
-
+    private GameObject tutorial1; // 新手教程1图片对象
+    private GameObject tutorial2; // 新手教程2图片对象
+    private bool isTutorial1Active = true; // 跟踪当前显示的教程
     private RubyController rubyController;
     private PlayerController playerController;
     private string[] currentDialogue;
@@ -83,14 +85,21 @@ public class Task0 : TaskBase
                 guideContinueButton.onClick.RemoveAllListeners();
                 guideContinueButton.onClick.AddListener(OnGuideContinue);
             }
+
+            // 查找新手教程1和教程2的图片对象
+            tutorial1 = guidePanel.transform.Find("Tutorial1")?.gameObject;
+            tutorial2 = guidePanel.transform.Find("Tutorial2")?.gameObject;
+
+            // 确保找到教程对象并设置初始状态
+            if (tutorial1 != null && tutorial2 != null)
+            {
+                tutorial1.SetActive(true);
+                tutorial2.SetActive(false);
+            }
             else
             {
-                Debug.LogWarning("GuidePanel 中未找到 Button 组件！");
+                Debug.LogWarning("未找到 Tutorial1 或 Tutorial2 对象！");
             }
-        }
-        else
-        {
-            Debug.LogWarning("未找到 GuidePanel，可能影响引导面板显示！");
         }
     }
 
@@ -144,6 +153,13 @@ public class Task0 : TaskBase
         if (guidePanel != null)
         {
             guidePanel.SetActive(true);
+            // 重置教程状态
+            isTutorial1Active = true;
+            if (tutorial1 != null && tutorial2 != null)
+            {
+                tutorial1.SetActive(true);
+                tutorial2.SetActive(false);
+            }
             Time.timeScale = 0f; // 暂停游戏时间
         }
         else
@@ -155,12 +171,26 @@ public class Task0 : TaskBase
 
     private void OnGuideContinue()
     {
-        if (guidePanel != null)
+        if (isTutorial1Active)
         {
-            guidePanel.SetActive(false);
-            Time.timeScale = 1f; // 恢复游戏时间
+            // 从教程1切换到教程2
+            if (tutorial1 != null && tutorial2 != null)
+            {
+                tutorial1.SetActive(false);
+                tutorial2.SetActive(true);
+                isTutorial1Active = false;
+            }
         }
-        StartCoroutine(TransitionAndTeleport());
+        else
+        {
+            // 关闭引导面板并继续传送
+            if (guidePanel != null)
+            {
+                guidePanel.SetActive(false);
+                Time.timeScale = 1f; // 恢复游戏时间
+            }
+            StartCoroutine(TransitionAndTeleport());
+        }
     }
 
     private IEnumerator TransitionAndTeleport()
