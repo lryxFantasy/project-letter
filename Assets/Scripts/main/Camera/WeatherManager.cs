@@ -17,7 +17,7 @@ public class WeatherManager : MonoBehaviour
     public Volume snowVolume;
     public Volume radiationVolume;
 
-    private string currentWeather = "sunny";
+    public string currentWeather = "sunny";
     private GameObject currentEffect;
     private Volume currentVolume;
     private bool lastIsIndoors;
@@ -41,7 +41,8 @@ public class WeatherManager : MonoBehaviour
             }
             else
             {
-                string[] weathers = new string[] { "sunny","rain", "snow", "radiation" };
+                // 增加晴天概率的加权随机选择
+                string[] weathers = new string[] { "sunny", "sunny", "rain", "rain","snow", "snow", "radiation" };
                 string newWeather = weathers[Random.Range(0, weathers.Length)];
                 ApplyWeather(newWeather);
             }

@@ -37,6 +37,7 @@ public class RubyController : MonoBehaviour
     private bool isShieldActive = false; // 护盾状态，阻止所有伤害
     private float shieldTimer = 0f; // 剩余护盾时间
     [SerializeField] private SpriteRenderer shieldSprite; // 护盾精灵，显示护盾效果
+    private WeatherManager weatherManager; // WeatherManager 引用
 
     void Start()
     {
@@ -46,6 +47,7 @@ public class RubyController : MonoBehaviour
 
         playerController = GetComponent<PlayerController>();
         cameraController = FindObjectOfType<CameraController>();
+        weatherManager = FindObjectOfType<WeatherManager>(); // 获取 WeatherManager 实例
 
         // 初始化血量UI
         if (healthBar != null)
@@ -161,9 +163,32 @@ public class RubyController : MonoBehaviour
             {
                 if (cameraController != null)
                 {
-                    if (!cameraController.IsIndoors() && currentHealth > 0) // 室外每秒-2血
+                    if (!cameraController.IsIndoors() && currentHealth > 0) // 室外扣血
                     {
-                        ChangeHealth(-2, true); // 标记为辐射伤害
+                        // 根据天气调整扣血量
+                        int healthLoss;
+                        if (weatherManager != null)
+                        {
+                            switch (weatherManager.currentWeather)
+                            {
+                                case "radiation":
+                                    healthLoss = -6; // 辐射天气扣6血
+                                    break;
+                                case "rain":
+                                case "snow":
+                                    healthLoss = -4; // 雨天和雪天扣4血
+                                    break;
+                                case "sunny":
+                                default:
+                                    healthLoss = -2; // 晴天扣2血
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            healthLoss = -2; // 默认扣2血（如果 WeatherManager 未找到）
+                        }
+                        ChangeHealth(healthLoss, true); // 标记为辐射伤害
                     }
                     else if (cameraController.IsIndoors() && currentHealth < maxHealth) // 室内每秒+10血
                     {
