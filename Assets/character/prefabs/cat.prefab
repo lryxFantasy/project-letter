@@ -52,7 +52,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -144,7 +144,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -191,7 +191,14 @@ MonoBehaviour:
   speed: 5.05
   maxHealth: 5
   timeInvincible: 2
+  healthBar: {fileID: 0}
+  healthText: {fileID: 0}
+  pauseHealthUpdate: 0
+  deathPanel: {fileID: 0}
+  continueButton: {fileID: 0}
   projectilePrefab: {fileID: 0}
+  cameraController: {fileID: 0}
+  shieldSprite: {fileID: 0}
 --- !u!95 &5241410273058124690
 Animator:
   serializedVersion: 5
@@ -309,6 +316,8 @@ MonoBehaviour:
   optionButtonPrefab: {fileID: 5601276670822262584, guid: e461c4b9bb951724c85583e864e9e35e,
     type: 3}
   optionsContainer: {fileID: 0}
+  favorabilitySlider: {fileID: 0}
+  favorabilityText: {fileID: 0}
   cameraController: {fileID: 0}
 --- !u!114 &8715090867171792223
 MonoBehaviour:
@@ -326,3 +335,4 @@ MonoBehaviour:
   inventoryManager: {fileID: 0}
   inventoryButton: {fileID: 0}
   pauseMenu: {fileID: 0}
+  inventoryCloseButton: {fileID: 0}
